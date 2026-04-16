@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GOJAPAN</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+:root{--ink:#1a1410;--paper:#faf7f2;--warm:#f0ebe0;--accent:#c8502a;--al:#e8735a;--gold:#b8860b;--muted:#7a6e62;--border:#d4c8b8;--ok:#4a7c59}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:'DM Sans','Noto Serif TC',sans-serif;min-height:100vh;overflow-x:hidden}
+.hd{background:var(--ink);color:var(--paper);padding:22px 24px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden}
+.hd::before{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;border:2px solid rgba(200,80,42,.25);border-radius:50%}
+.hd-icon{font-size:26px}.hd-t{font-family:'Noto Serif TC',serif;font-size:18px;font-weight:700;letter-spacing:2px}.hd-s{font-size:11px;color:rgba(250,247,242,.45);margin-top:2px}
+.main{max-width:620px;margin:0 auto;padding:24px 16px 80px}
+.steps{display:flex;gap:8px;margin-bottom:28px;align-items:center}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .3s}
+.dot.active{background:var(--accent);width:24px;border-radius:4px}
+.dot.done{background:var(--ok)}
+.slbl{font-size:11px;color:var(--muted);margin-left:8px;letter-spacing:1px;text-transform:uppercase}
+.fs{animation:fu .4s ease}
+@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.qb{margin-bottom:24px}
+.ql{font-family:'Noto Serif TC',serif;font-size:15px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.qn{font-family:'DM Sans',sans-serif;font-size:11px;color:var(--accent);background:rgba(200,80,42,.1);padding:2px 8px;border-radius:20px;font-weight:500}
+.og{display:grid;gap:8px}.og.c2{grid-template-columns:1fr 1fr}.og.c3{grid-template-columns:1fr 1fr 1fr}.og.c4{grid-template-columns:repeat(4,1fr)}
+.ob{padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;background:white;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--ink);transition:all .2s;text-align:left}
+.ob:hover{border-color:var(--al);background:rgba(200,80,42,.03)}
+.ob.sel{border-color:var(--accent);background:rgba(200,80,42,.06);color:var(--accent);font-weight:500}
+.ob .od{display:block;font-size:11px;color:var(--muted);margin-top:2px;font-weight:400}
+.ob.sel .od{color:var(--al)}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cb{padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;background:white;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--ink);transition:all .2s;display:flex;align-items:center;gap:8px}
+.cb.chk{border-color:var(--accent);background:rgba(200,80,42,.06);color:var(--accent);font-weight:500}
+.gbtn{width:100%;padding:15px;background:var(--accent);color:white;border:none;border-radius:10px;font-size:15px;font-family:'Noto Serif TC',serif;font-weight:700;cursor:pointer;letter-spacing:2px;margin-top:6px;transition:all .2s}
+.gbtn:hover{background:#b8441f;transform:translateY(-1px);box-shadow:0 4px 20px rgba(200,80,42,.3)}
+.gbtn:disabled{background:var(--border);color:var(--muted);transform:none;box-shadow:none;cursor:not-allowed}
+.ld{display:none;text-align:center;padding:60px 20px}
+.ld.show{display:block}
+.sp{width:38px;height:38px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 18px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rs{display:none;animation:fu .5s ease}
+.rs.show{display:block}
+.rh{background:var(--ink);color:var(--paper);border-radius:12px;padding:22px;margin-bottom:18px;position:relative;overflow:hidden}
+.rh::after{content:'🇯🇵';position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:44px;opacity:.18}
+.rt{font-family:'Noto Serif TC',serif;font-size:19px;font-weight:700;margin-bottom:4px}
+.rm{font-size:12px;color:rgba(250,247,242,.45);letter-spacing:1px}
+.notice{background:rgba(200,80,42,.07);border-left:3px solid var(--accent);padding:10px 14px;font-size:12px;color:var(--accent);border-radius:0 8px 8px 0;margin-bottom:18px}
+.ub{background:linear-gradient(135deg,#1a1410,#2d2218);border:1px solid var(--gold);border-radius:12px;padding:18px;margin-bottom:18px;display:none}
+.ub.show{display:block;animation:fu .4s ease .3s both}
+.ut{color:var(--gold);font-size:13px;font-weight:600;margin-bottom:10px}
+.ui{display:flex;align-items:flex-start;gap:8px;margin-bottom:7px;color:rgba(250,247,242,.8);font-size:13px}
+.ud{color:var(--accent);flex-shrink:0}
+.ubtn{width:100%;padding:12px;background:var(--gold);color:var(--ink);border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Serif TC',serif;letter-spacing:1px;transition:all .2s;margin-top:12px}
+.dc{background:white;border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;transition:box-shadow .2s}
+.dc:hover{box-shadow:0 4px 14px rgba(0,0,0,.07)}
+.dh{background:var(--warm);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.dl{font-family:'Noto Serif TC',serif;font-size:14px;font-weight:700}
+.db{font-size:10px;color:var(--muted);background:white;padding:3px 10px;border-radius:20px;border:1px solid var(--border)}
+.dbody{padding:15px 18px}
+.sl{margin-bottom:13px}.sl:last-child{margin-bottom:0}
+.st{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px;font-weight:500}
+.sc{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.sm{flex:1}
+.sn{font-size:14px;font-weight:500;margin-bottom:2px}
+.sa{font-size:11px;color:var(--muted)}
+.tip{font-size:11px;color:var(--accent);margin-top:3px}
+.swp{flex-shrink:0;padding:5px 11px;border:1px solid var(--border);border-radius:20px;background:white;font-size:11px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap}
+.swp:hover{border-color:var(--accent);color:var(--accent)}
+.swp.swapped{color:var(--ok);border-color:var(--ok);animation:pop .3s ease}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+.dv{height:1px;background:var(--warm);margin:11px 0}
+.fs2{background:var(--warm);border-radius:8px;padding:11px 13px;margin-top:10px}
+.fl{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;font-weight:600}
+.fm{font-size:13px;font-weight:500;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.fbk{font-size:12px;color:var(--muted)}
+.ftg{font-size:10px;color:var(--muted);background:white;padding:2px 7px;border-radius:10px;border:1px solid var(--border)}
+.tn{display:flex;align-items:center;gap:6px;padding:7px 11px;background:rgba(200,80,42,.06);border-radius:6px;margin-top:9px;font-size:11px;color:var(--accent)}
+/* 移動日 banner */
+.move-day{background:linear-gradient(135deg,#1a1410,#2d2218);border-radius:8px;padding:13px 15px;margin-bottom:11px;display:flex;align-items:center;gap:10px}
+.move-day-icon{font-size:20px;flex-shrink:0}
+.move-day-info{flex:1}
+.move-day-route{color:var(--paper);font-size:13px;font-weight:600;margin-bottom:2px}
+.move-day-tip{font-size:11px;color:rgba(250,247,242,.5)}
+.move-day-badge{font-size:10px;background:rgba(200,80,42,.7);color:white;padding:2px 8px;border-radius:10px;flex-shrink:0}
+.move-day-lock{font-size:11px;color:rgba(200,80,42,.8);margin-top:7px;padding:6px 10px;background:rgba(200,80,42,.08);border-radius:6px}
+.ss{margin-top:22px;padding:18px;background:white;border:1px solid var(--border);border-radius:12px}
+.sstl{font-size:12px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:11px;font-weight:600}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sbtn{padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:white;cursor:pointer;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--ink);transition:all .2s;text-align:left;display:flex;align-items:center;gap:8px}
+.sbtn:hover{border-color:var(--accent);color:var(--accent);background:rgba(200,80,42,.04)}
+.inqs{margin-top:22px;border:1.5px solid var(--accent);border-radius:12px;overflow:hidden}
+.inqh{background:var(--accent);color:white;padding:16px 18px}
+.inqt{font-family:'Noto Serif TC',serif;font-size:16px;font-weight:700;margin-bottom:3px}
+.inqs2{font-size:12px;opacity:.85}
+.inqb{padding:18px;background:white}
+.inqn{background:rgba(200,80,42,.07);border-left:3px solid var(--accent);padding:9px 13px;font-size:12px;color:var(--accent);border-radius:0 6px 6px 0;margin-bottom:18px}
+.ig{margin-bottom:13px}
+.il{font-size:12px;font-weight:600;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.ia{font-size:10px;background:var(--ok);color:white;padding:1px 6px;border-radius:10px;font-weight:400}
+.ii{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--ink);background:white;outline:none;transition:border-color .2s}
+.ii:focus{border-color:var(--accent)}
+.iro .ii{background:var(--warm);color:var(--muted)}
+.it{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:7px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--ink);background:white;outline:none;resize:vertical;line-height:1.6;transition:border-color .2s}
+.it:focus{border-color:var(--accent)}
+.iro .it{background:var(--warm);color:var(--muted)}
+.isn{background:var(--warm);border-radius:8px;padding:13px;margin-bottom:15px}
+.isnt{font-size:12px;font-weight:700;margin-bottom:7px}
+.isnb{font-size:12px;color:var(--muted);line-height:2;margin-bottom:9px}
+.isnc{display:flex;flex-direction:column;gap:5px}
+.ir{font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.ir input{accent-color:var(--accent)}
+.cpbtn{width:100%;padding:14px;background:var(--ink);color:white;border:none;border-radius:9px;font-size:14px;font-family:'Noto Serif TC',serif;font-weight:700;cursor:pointer;letter-spacing:1px;transition:all .2s;margin-bottom:7px}
+.cpbtn:hover{background:var(--accent);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.cpbtn.copied{background:var(--ok)}
+.cphi{text-align:center;font-size:11px;color:var(--muted)}
+.rbtn{width:100%;padding:11px;border:1px solid var(--border);background:white;border-radius:8px;font-size:13px;color:var(--muted);cursor:pointer;margin-top:11px;font-family:'DM Sans',sans-serif;transition:all .2s}
+.rbtn:hover{border-color:var(--ink);color:var(--ink)}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--paper);padding:9px 18px;border-radius:20px;font-size:13px;transition:transform .3s;z-index:100;white-space:nowrap;max-width:90vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+/* Q6 住宿切換 */
+.new-tag{display:inline-block;font-size:10px;background:var(--ok);color:white;padding:1px 7px;border-radius:10px;margin-left:6px;font-weight:500;vertical-align:middle}
+</style>
+</head>
+<body>
+<div class="hd">
+<div class="hd-icon">🗾</div>
+<div><div class="hd-t">日本行程規劃</div><div class="hd-s">GOJAPAN · AI TRIP PLANNER</div></div>
+</div>
+<div class="main">
+<div class="steps">
+<div class="dot active" id="d0"></div>
+<div class="dot" id="d1"></div>
+<div class="dot" id="d2"></div>
+<span class="slbl" id="slbl">填寫偏好</span>
+</div>
+ 
+<!-- FORM -->
+<div class="fs" id="form">
+ 
+<div class="qb">
+<div class="ql"><span class="qn">Q1</span>目的地</div>
+<div class="og c2">
+<button class="ob" data-g="city" data-v="osaka_kyoto" onclick="sel(this)">大阪・京都<span class="od">關西經典路線</span></button>
+<button class="ob" data-g="city" data-v="tokyo" onclick="sel(this)">東京<span class="od">都市精華路線</span></button>
+</div>
+<div class="og c2" style="margin-top:8px">
+<button class="ob" data-g="city" data-v="hokkaido" onclick="sel(this)">北海道<span class="od">自然風景路線</span></button>
+<button class="ob" data-g="city" data-v="okinawa" onclick="sel(this)">沖繩<span class="od">海島悠閒路線</span></button>
+</div>
+</div>
+ 
+<div class="qb">
+<div class="ql"><span class="qn">Q2</span>天數</div>
+<div class="og c4">
+<button class="ob" data-g="days" data-v="3" onclick="sel(this)">3天</button>
+<button class="ob" data-g="days" data-v="4" onclick="sel(this)">4天</button>
+<button class="ob" data-g="days" data-v="5" onclick="sel(this)">5天</button>
+<button class="ob" data-g="days" data-v="6" onclick="sel(this)">6天</button>
+</div>
+</div>
+ 
+<div class="qb">
+<div class="ql"><span class="qn">Q3</span>旅遊節奏</div>
+<div class="og c3">
+<button class="ob" data-g="pace" data-v="easy" onclick="sel(this)">輕鬆<span class="od">少走多休息</span></button>
+<button class="ob" data-g="pace" data-v="balanced" onclick="sel(this)">平衡<span class="od">一般節奏</span></button>
+<button class="ob" data-g="pace" data-v="active" onclick="sel(this)">積極<span class="od">多跑不浪費</span></button>
+</div>
+</div>
+ 
+<div class="qb">
+<div class="ql"><span class="qn">Q4</span>旅伴類型</div>
+<div class="og c2">
+<button class="ob" data-g="group" data-v="couple" onclick="sel(this)">情侶</button>
+<button class="ob" data-g="group" data-v="friends" onclick="sel(this)">朋友</button>
+<button class="ob" data-g="group" data-v="family" onclick="sel(this)">家庭（有長輩）</button>
+<button class="ob" data-g="group" data-v="kids" onclick="sel(this)">親子</button>
+</div>
+</div>
+ 
+<div class="qb">
+<div class="ql"><span class="qn">Q5</span>需求（可複選）</div>
+<div class="cg">
+<button class="cb" data-tag="shopping" onclick="tog(this)"><span>🛍️</span>購物</button>
+<button class="cb" data-tag="food" onclick="tog(this)"><span>🍜</span>美食</button>
+<button class="cb" data-tag="photo" onclick="tog(this)"><span>📸</span>拍照景點</button>
+<button class="cb" data-tag="nature" onclick="tog(this)"><span>🌿</span>自然/郊區</button>
+</div>
+</div>
+ 
+<div class="qb">
+<div class="ql"><span class="qn">Q6</span>想加入跨城市行程？<span style="font-size:11px;font-weight:400;color:var(--muted);margin-left:6px">不選預設單城市</span></div>
+<div class="og c2">
+<button class="ob" id="hotel-yes" onclick="selHotel('yes')">是・加入延伸城市<span class="new-tag">NEW</span><span class="od">多城市・含行李與移動安排</span></button>
+</div>
+<div id="hotel-multi-note" style="display:none;margin-top:10px;background:rgba(74,124,89,.07);border:1.5px solid var(--ok);border-radius:10px;padding:13px 16px;font-size:12px;color:#2d6040;animation:fu .3s ease">
+<strong style="display:block;margin-bottom:4px;font-size:13px">🗺️ 多城市模式已啟用</strong>
+目的地選擇將被忽略，改用「東京→箱根→熱海」固定路線。移動日景點鎖定，換一個功能只在當日城市內替換。
+</div>
+</div>
+ 
+<button class="gbtn" id="gbtn" onclick="gen()" disabled>產生我的行程 →</button>
+</div>
+ 
+<!-- LOADING -->
+<div class="ld" id="ld"><div class="sp"></div><div style="color:var(--muted);font-size:14px">正在規劃最適合你的行程…</div></div>
+ 
+<!-- RESULT -->
+<div class="rs" id="rs">
+<div class="rh"><div class="rt" id="rt">大阪・京都 5天4夜</div><div class="rm" id="rm">平衡節奏・朋友出遊</div></div>
+<div class="notice">💡 每個景點都可以按「換一個」替換。行程不用完美，喜歡就好。</div>
+<div class="ub" id="ub">
+<div class="ut">✦ 升級優化版可以做到</div>
+<div class="ui"><span class="ud">→</span><span>依人潮高峰自動調整景點時段</span></div>
+<div class="ui"><span class="ud">→</span><span>替換排隊風險高的餐廳</span></div>
+<div class="ui"><span class="ud">→</span><span>動線壓縮，減少無效移動</span></div>
+<div class="ui"><span class="ud">→</span><span>每天加入天氣備案</span></div>
+<button class="ubtn" onclick="toast2('升級功能開發中，敬請期待！')">升級優化版 NT$299 →</button>
+</div>
+<div id="cards"></div>
+<div class="ss">
+<div class="sstl">⚡ 旅途中突發狀況</div>
+<div class="sg">
+<button class="sbtn" onclick="sit('queue')"><span>⏱️</span>餐廳排太久</button>
+<button class="sbtn" onclick="sit('rain')"><span>🌧️</span>下雨了</button>
+<button class="sbtn" onclick="sit('late')"><span>🏃</span>行程來不及</button>
+<button class="sbtn" onclick="sit('tired')"><span>😴</span>太累走不動</button>
+</div>
+</div>
+<div class="inqs">
+<div class="inqh"><div class="inqt">產生包車詢價單</div><div class="inqs2">填完後一鍵複製貼到 LINE 即可</div></div>
+<div class="inqb">
+<div class="inqn">✦ 天數、城市、行程由工具自動帶入，請補填其餘欄位</div>
+<div class="ig"><div class="il">1. 台灣居住縣市</div><input class="ii" id="i1" placeholder="例：台北市、台中市..."></div>
+<div class="ig"><div class="il">2. 出發地點（飯店或機場）</div><input class="ii" id="i2" placeholder="例：難波某飯店 / 關西機場"></div>
+<div class="ig"><div class="il">3. 旅遊結束地點</div><input class="ii" id="i3" placeholder="例：大阪飯店 / 關西機場"></div>
+<div class="ig"><div class="il">4. 預定包車日期</div><input class="ii" id="i4" placeholder="例：2026/08/10 ～ 2026/08/14"></div>
+<div class="ig"><div class="il">5. 包車旅遊人數</div><input class="ii" id="i5" placeholder="例：大人4人、兒童1人"></div>
+<div class="ig iro"><div class="il">6. 包車旅遊天數 <span class="ia">自動帶入</span></div><input class="ii" id="i6" readonly></div>
+<div class="ig iro"><div class="il">7. 旅遊城市 <span class="ia">自動帶入</span></div><input class="ii" id="i7" readonly></div>
+<div class="ig iro"><div class="il">8. 具體行程 <span class="ia">自動帶入</span></div><textarea class="it" id="i8" readonly rows="6"></textarea></div>
+<div class="ig"><div class="il">9. 每日住宿地點</div><textarea class="it" id="i9" placeholder="例：Day1住難波、Day2住京都..." rows="3"></textarea></div>
+<div class="ig"><div class="il">10. 兒童座椅需求</div><input class="ii" id="i10" placeholder="例：不需要 / 需要1個（3歲）"></div>
+<div class="ig"><div class="il">11. 行李大小/件數</div><input class="ii" id="i11" placeholder="例：26吋/3件、28吋/2件"></div>
+<div class="ig"><div class="il">12. 航班抵達時間</div><input class="ii" id="i12" placeholder="例：CI107 08/10 10:30抵關西"></div>
+<div class="ig"><div class="il">13. 航班離境時間</div><input class="ii" id="i13" placeholder="例：CI108 08/14 15:00離關西"></div>
+<div class="isn">
+<div class="isnt">📋 諮詢服務說明</div>
+<div class="isnb">✅ 已規劃好行程，只需報價 → <strong>免諮詢費</strong><br>📝 需協助規劃行程 → <strong>NT$2,000（成團可折抵）</strong></div>
+<div class="isnc">
+<label class="ir"><input type="radio" name="sv" value="quote" checked> 我已規劃好，只需報價</label>
+<label class="ir"><input type="radio" name="sv" value="plan"> 需要協助規劃行程</label>
+</div>
+</div>
+<button class="cpbtn" id="cpbtn" onclick="copy()">📋 一鍵複製詢價單 → 貼到 LINE</button>
+<div class="cphi">複製後貼到 GOJAPAN LINE 客服即可</div>
+</div>
+</div>
+<button class="rbtn" onclick="reset()">← 重新規劃</button>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+ 
+<script>
+// ── 單城市資料 ──────────────────────────────────────────
+const SINGLE={
+  osaka_kyoto:{
+    spots:{
+      "難波":[
+        {name:"道頓堀・グリコ看板",tip:"晚上霓虹最美，包車停戎橋附近",km:0,driveMin:0,stayMin:40},
+        {name:"心齋橋商圈",tip:"藥妝掃貨首選，從道頓堀走路5分",km:1,driveMin:5,stayMin:90},
+        {name:"黑門市場",tip:"早上9點前最新鮮，攤販全開",km:1,driveMin:5,stayMin:60},
+        {name:"法善寺橫丁",tip:"深夜食堂氛圍，傍晚後最有感",km:0,driveMin:3,stayMin:30}
+      ],
+      "大阪城":[
+        {name:"大阪城公園（外圍）",tip:"包車可停天守閣前廣場，外圍拍照免門票",km:5,driveMin:15,stayMin:60},
+        {name:"大阪城天守閣",tip:"平日早上9點開門前到最少人",km:5,driveMin:15,stayMin:90},
+        {name:"中之島公園",tip:"大阪城附近10分鐘，適合飯後散步",km:6,driveMin:18,stayMin:45}
+      ],
+      "京都東山":[
+        {name:"清水寺",tip:"上午10點前到，包車停產寧坂停車場",km:75,driveMin:70,stayMin:90},
+        {name:"二年坂・三年坂",tip:"清水寺走下來就到，包車在清水坂等",km:75,driveMin:70,stayMin:60},
+        {name:"高台寺",tip:"人少，二三坂走過來5分鐘",km:74,driveMin:68,stayMin:60},
+        {name:"八坂神社",tip:"免費，全天開放，包車停祇園停車場",km:73,driveMin:67,stayMin:30}
+      ],
+      "伏見":[
+        {name:"伏見稻荷大社",tip:"⚠️ 早上7:30前到，千本鳥居空曠無人",km:70,driveMin:65,stayMin:90},
+        {name:"月桂冠大倉紀念館",tip:"稻荷附近5分，日本酒試飲體驗",km:68,driveMin:63,stayMin:60}
+      ],
+      "嵐山":[
+        {name:"嵐山竹林",tip:"早上7點前幾乎無人，包車停嵐山公園",km:90,driveMin:80,stayMin:40},
+        {name:"渡月橋",tip:"竹林走下來10分鐘，秋天楓葉最美",km:89,driveMin:78,stayMin:30},
+        {name:"天龍寺庭園",tip:"史蹟庭園，渡月橋旁，門票500円",km:89,driveMin:79,stayMin:60},
+        {name:"嵯峨野古道",tip:"人力車拍照聖地，包車在渡月橋等",km:89,driveMin:79,stayMin:50}
+      ],
+      "梅田":[
+        {name:"梅田空中庭園展望台",tip:"晚上夜景，包車停Herbis停車場",km:3,driveMin:10,stayMin:60},
+        {name:"Grand Front大阪",tip:"購物吃飯，離飯店最近，收車前最後一站",km:3,driveMin:10,stayMin:90}
+      ],
+      "奈良":[
+        {name:"奈良公園・鹿群",tip:"鹿仙貝公園入口買，包車停春日野道",km:95,driveMin:85,stayMin:60},
+        {name:"東大寺大佛殿",tip:"世界最大木造建築，早上人少",km:96,driveMin:86,stayMin:90},
+        {name:"春日大社",tip:"東大寺走10分，樹蔭涼爽",km:97,driveMin:87,stayMin:60},
+        {name:"ならまち（奈良町）",tip:"老街咖啡廳，下午最悠閒，包車停元興寺旁",km:94,driveMin:84,stayMin:90}
+      ]
+    },
+    restaurants:{
+      "難波":[
+        {name:"一蘭拉麵 道頓堀店",backup:"金龍拉麵（24h）",tag:"拉麵"},
+        {name:"燒肉力丸 心齋橋店",backup:"壽司郎 難波",tag:"燒肉"},
+        {name:"串カツだるま 難波",backup:"CoCo壱番屋",tag:"炸串"}
+      ],
+      "京都東山":[
+        {name:"奧丹清水（湯豆腐）",backup:"京豆腐藤野",tag:"傳統料理"},
+        {name:"祇園NITI",backup:"附近4.0↑隨機",tag:"創意日料"}
+      ],
+      "嵐山":[{name:"湯豆腐 竹のや",backup:"嵐山附近定食店",tag:"湯豆腐"}],
+      "奈良":[
+        {name:"奈良 山崎屋（柿葉壽司）",backup:"附近定食屋",tag:"鄉土料理"},
+        {name:"ならまち咖啡廳",backup:"便利商店",tag:"輕食"}
+      ]
+    },
+    days:{
+      "5":[
+        {label:"Day 1",theme:"到達・難波輕鬆走",badge:"今天只走一條街",morning:null,afternoon:{area:"難波",index:0},evening:{area:"難波",index:1},food:{area:"難波",index:0},note:"抵達日，check-in 後包車接送，輕鬆逛"},
+        {label:"Day 2",theme:"大阪城・市場",badge:"大阪精華日",morning:{area:"大阪城",index:0},afternoon:{area:"難波",index:2},evening:{area:"梅田",index:0},food:{area:"難波",index:1},note:"包車全日，大阪城→黑門→梅田夜景"},
+        {label:"Day 3",theme:"京都・東山線",badge:"⚠️ 稻荷一定早上去",morning:{area:"伏見",index:0},afternoon:{area:"京都東山",index:0},evening:{area:"京都東山",index:2},food:{area:"京都東山",index:0},note:"包車從難波出發，伏見→清水寺→高台寺"},
+        {label:"Day 4",theme:"嵐山・竹林",badge:"包車全日制",morning:{area:"嵐山",index:0},afternoon:{area:"嵐山",index:2},evening:{area:"嵐山",index:3},food:{area:"嵐山",index:0},note:"嵐山景點集中，包車停渡月橋附近一整天"},
+        {label:"Day 5",theme:"回程日",badge:"無條件清空",morning:null,afternoon:null,evening:null,food:null,note:"早上咖啡，包車送機場"}
+      ],
+      "6":[
+        {label:"Day 1",theme:"到達・難波輕鬆走",badge:"今天只走一條街",morning:null,afternoon:{area:"難波",index:0},evening:{area:"難波",index:1},food:{area:"難波",index:0},note:"抵達日，包車接機後輕鬆逛"},
+        {label:"Day 2",theme:"大阪城・黑門",badge:"大阪精華日",morning:{area:"大阪城",index:0},afternoon:{area:"難波",index:2},evening:{area:"梅田",index:0},food:{area:"難波",index:1},note:"包車全日"},
+        {label:"Day 3",theme:"京都・東山線",badge:"⚠️ 稻荷一定早上去",morning:{area:"伏見",index:0},afternoon:{area:"京都東山",index:0},evening:{area:"京都東山",index:2},food:{area:"京都東山",index:0},note:"包車從難波出發70分"},
+        {label:"Day 4",theme:"嵐山・古道",badge:"包車全日制",morning:{area:"嵐山",index:0},afternoon:{area:"嵐山",index:2},evening:{area:"嵐山",index:3},food:{area:"嵐山",index:0},note:"嵐山包車停渡月橋"},
+        {label:"Day 5",theme:"奈良・鹿と大佛",badge:"包車日歸",morning:{area:"奈良",index:0},afternoon:{area:"奈良",index:1},evening:{area:"奈良",index:3},food:{area:"奈良",index:0},note:"難波→奈良包車約85分"},
+        {label:"Day 6",theme:"回程日",badge:"無條件清空",morning:null,afternoon:null,evening:null,food:null,note:"早上咖啡，包車送機場"}
+      ]
+    }
+  },
+  tokyo:{
+    spots:{
+      "新宿":[
+        {name:"新宿歌舞伎町・東寶大樓",tip:"哥吉拉在頂樓，晚上必拍，包車停東宝前",km:0,driveMin:0,stayMin:40},
+        {name:"新宿御苑",tip:"白天散步最舒服，包車停新宿門停車場",km:1,driveMin:5,stayMin:90},
+        {name:"Donki 新宿本店",tip:"掃貨必去，24小時，包車在附近等",km:1,driveMin:5,stayMin:90},
+        {name:"思い出横丁（燒烤橫丁）",tip:"傍晚最熱鬧，新宿站西口步行2分",km:1,driveMin:5,stayMin:60}
+      ],
+      "淺草":[
+        {name:"淺草寺・仲見世通",tip:"早上8點前到，包車停雷門前停車場",km:12,driveMin:35,stayMin:90},
+        {name:"合羽橋道具街",tip:"廚具控天堂，淺草寺走10分",km:11,driveMin:32,stayMin:60},
+        {name:"隅田川・吾妻橋",tip:"淺草寺走5分，東京晴空塔背景拍照",km:12,driveMin:35,stayMin:30}
+      ],
+      "銀座":[
+        {name:"銀座六丁目・主街",tip:"頂級百貨，包車停銀座駐車場",km:8,driveMin:25,stayMin:90},
+        {name:"東銀座・歌舞伎座",tip:"外觀拍照免費，銀座走5分",km:8,driveMin:25,stayMin:30},
+        {name:"築地外市場",tip:"早上8點前最新鮮，銀座附近10分",km:9,driveMin:28,stayMin:60}
+      ],
+      "原宿":[
+        {name:"竹下通・表參道",tip:"平日早上人最少，包車停表參道Hills停車場",km:10,driveMin:30,stayMin:90},
+        {name:"明治神宮",tip:"免費入場，表參道走5分",km:10,driveMin:30,stayMin:60}
+      ],
+      "澀谷":[
+        {name:"澀谷十字路口・スクランブル交差点",tip:"傍晚人潮最壯觀，包車停Bunkamura停車場",km:11,driveMin:32,stayMin:40},
+        {name:"澀谷天空展望台",tip:"需預約，夜景必看，澀谷站直通",km:11,driveMin:32,stayMin:90},
+        {name:"代官山蔦屋書店",tip:"澀谷旁10分，網美咖啡廳最愛",km:12,driveMin:35,stayMin:60}
+      ]
+    },
+    restaurants:{
+      "新宿":[
+        {name:"一蘭拉麵 新宿店",backup:"松屋 新宿",tag:"拉麵"},
+        {name:"鳥貴族 新宿店",backup:"吉野家",tag:"居酒屋"}
+      ],
+      "淺草":[{name:"駒形どぜう（泥鰍鍋）",backup:"天丼 金子半之助",tag:"老字號"}],
+      "銀座":[{name:"銀座 久兵衛（壽司）",backup:"すし三崎丸",tag:"壽司"}],
+      "澀谷":[{name:"澀谷ヒカリエ 餐廳層",backup:"任何4.0↑店",tag:"選擇多"}]
+    },
+    days:{
+      "5":[
+        {label:"Day 1",theme:"到達・新宿",badge:"今天只走一條街",morning:null,afternoon:{area:"新宿",index:0},evening:{area:"新宿",index:3},food:{area:"新宿",index:0},note:"抵達日，包車接機後新宿周邊"},
+        {label:"Day 2",theme:"淺草・銀座",badge:"東京經典日",morning:{area:"淺草",index:0},afternoon:{area:"銀座",index:0},evening:{area:"銀座",index:2},food:{area:"淺草",index:0},note:"包車全日，淺草→銀座→築地"},
+        {label:"Day 3",theme:"澀谷・原宿",badge:"潮流文化日",morning:{area:"原宿",index:0},afternoon:{area:"澀谷",index:0},evening:{area:"澀谷",index:1},food:{area:"澀谷",index:0},note:"原宿到澀谷包車5分，步行也可"},
+        {label:"Day 4",theme:"新宿・代官山",badge:"購物修養日",morning:{area:"新宿",index:1},afternoon:{area:"澀谷",index:2},evening:{area:"新宿",index:2},food:{area:"銀座",index:0},note:"包車新宿→代官山→Donki掃貨"},
+        {label:"Day 5",theme:"回程日",badge:"無條件清空",morning:null,afternoon:null,evening:null,food:null,note:"早上咖啡，包車送機場"}
+      ],
+      "6":[
+        {label:"Day 1",theme:"到達・新宿",badge:"今天只走一條街",morning:null,afternoon:{area:"新宿",index:0},evening:{area:"新宿",index:3},food:{area:"新宿",index:0},note:"抵達日輕鬆"},
+        {label:"Day 2",theme:"淺草・隅田川",badge:"東京經典日",morning:{area:"淺草",index:0},afternoon:{area:"淺草",index:2},evening:{area:"銀座",index:0},food:{area:"淺草",index:0},note:"包車全日，淺草→隅田川→銀座"},
+        {label:"Day 3",theme:"澀谷・原宿",badge:"潮流文化日",morning:{area:"原宿",index:0},afternoon:{area:"澀谷",index:0},evening:{area:"澀谷",index:1},food:{area:"澀谷",index:0},note:"原宿到澀谷包車5分"},
+        {label:"Day 4",theme:"銀座・築地",badge:"美食購物日",morning:{area:"銀座",index:2},afternoon:{area:"銀座",index:0},evening:{area:"新宿",index:2},food:{area:"銀座",index:0},note:"包車早上築地，下午銀座"},
+        {label:"Day 5",theme:"代官山・新宿",badge:"最後掃貨日",morning:{area:"澀谷",index:2},afternoon:{area:"新宿",index:2},evening:{area:"新宿",index:0},food:{area:"新宿",index:1},note:"包車代官山→Donki→歌舞伎町"},
+        {label:"Day 6",theme:"回程日",badge:"無條件清空",morning:null,afternoon:null,evening:null,food:null,note:"早上咖啡，包車送機場"}
+      ]
+    }
+  },
+  hokkaido:{
+    spots:{
+      "札幌":[
+        {name:"狸小路商店街",tip:"室內購物，雨天也OK，包車停二条市場旁",km:0,driveMin:0,stayMin:90},
+        {name:"薄野・夜景",tip:"北海道夜生活中心，包車晚上接送",km:1,driveMin:5,stayMin:60},
+        {name:"大通公園",tip:"季節活動多，隨時好拍，包車停大通公園旁",km:1,driveMin:5,stayMin:45},
+        {name:"北海道廳舊本廳舍",tip:"免費入場，紅磚建築，大通公園旁走3分",km:1,driveMin:5,stayMin:30}
+      ],
+      "小樽":[
+        {name:"小樽運河",tip:"黃昏最美，路燈亮起時，包車停小樽運河駐車場",km:40,driveMin:45,stayMin:60},
+        {name:"堺町通・玻璃工藝街",tip:"北一硝子不能錯過，運河走5分",km:40,driveMin:45,stayMin:90},
+        {name:"小樽壽司屋通",tip:"新鮮海膽・鮭魚卵，堺町通旁",km:39,driveMin:44,stayMin:60}
+      ],
+      "富良野":[
+        {name:"富田農場（薰衣草）",tip:"7月最盛開，早上光線好，包車直達農場",km:160,driveMin:130,stayMin:90},
+        {name:"富良野起司工房",tip:"現做起司免費試吃，農場旁5分",km:158,driveMin:128,stayMin:45},
+        {name:"北西の丘展望公園",tip:"360度丘陵，包車停展望台前",km:155,driveMin:125,stayMin:40}
+      ],
+      "美瑛":[
+        {name:"拼布之路・丘陵景觀",tip:"⚠️ 景點分散，包車才跑得完",km:175,driveMin:140,stayMin:90},
+        {name:"青池（白金青い池）",tip:"神秘藍色水池，早上光線最好，包車30分",km:180,driveMin:145,stayMin:60},
+        {name:"四季彩之丘",tip:"花田分區，包車停場旁",km:173,driveMin:138,stayMin:60},
+        {name:"新榮之丘展望公園",tip:"夕陽聖地，免費停車，包車收工前最後一站",km:170,driveMin:135,stayMin:30}
+      ]
+    },
+    restaurants:{
+      "札幌":[
+        {name:"札幌味噌拉麵 けやき",backup:"一幻蝦味噌拉麵",tag:"拉麵"},
+        {name:"二条市場・海鮮丼",backup:"附近迴轉壽司",tag:"海鮮"}
+      ],
+      "小樽":[{name:"小樽政寿司",backup:"壽司 根室花まる",tag:"壽司"}],
+      "富良野":[{name:"富田農場餐廳",backup:"附近咖啡廳",tag:"定食"}],
+      "美瑛":[{name:"美瑛選果（農場直送）",backup:"美瑛附近咖啡廳",tag:"農場料理"}]
+    },
+    days:{
+      "5":[
+        {label:"Day 1",theme:"到達・札幌",badge:"今天只走一條街",morning:null,afternoon:{area:"札幌",index:0},evening:{area:"札幌",index:1},food:{area:"札幌",index:0},note:"抵達日，包車接機後狸小路逛"},
+        {label:"Day 2",theme:"小樽・日歸",badge:"海港包車日",morning:{area:"小樽",index:0},afternoon:{area:"小樽",index:1},evening:{area:"小樽",index:2},food:{area:"小樽",index:0},note:"包車從札幌出發45分，小樽一整天"},
+        {label:"Day 3",theme:"富良野・薰衣草",badge:"包車全日制",morning:{area:"富良野",index:0},afternoon:{area:"富良野",index:1},evening:{area:"富良野",index:2},food:{area:"富良野",index:0},note:"⚠️ 包車從札幌出發130分，建議早出發"},
+        {label:"Day 4",theme:"美瑛・丘陵",badge:"包車必選行程",morning:{area:"美瑛",index:0},afternoon:{area:"美瑛",index:1},evening:{area:"美瑛",index:3},food:{area:"美瑛",index:0},note:"⚠️ 美瑛景點全部分散，非包車無法完成"},
+        {label:"Day 5",theme:"回程日",badge:"無條件清空",morning:null,afternoon:null,evening:null,food:null,note:"早上咖啡，包車送新千歲機場"}
+      ],
+      "6":[
+        {label:"Day 1",theme:"到達・札幌",badge:"今天只走一條街",morning:null,afternoon:{area:"札幌",index:0},evening:{area:"札幌",index:1},food:{area:"札幌",index:0},note:"抵達日，包車接機"},
+        {label:"Day 2",theme:"小樽・日歸",badge:"海港包車日",morning:{area:"小樽",index:0},afternoon:{area:"小樽",index:1},evening:{area:"小樽",index:2},food:{area:"小樽",index:0},note:"包車出發45分"},
+        {label:"Day 3",theme:"富良野・薰衣草",badge:"花田主力日",morning:{area:"富良野",index:0},afternoon:{area:"富良野",index:1},evening:{area:"富良野",index:2},food:{area:"富良野",index:0},note:"包車從札幌出發130分"},
+        {label:"Day 4",theme:"美瑛・丘陵景觀",badge:"包車必選",morning:{area:"美瑛",index:0},afternoon:{area:"美瑛",index:2},evening:{area:"美瑛",index:3},food:{area:"美瑛",index:0},note:"⚠️ 非包車無法完成"},
+        {label:"Day 5",theme:"札幌・購物",badge:"修復日",morning:{area:"札幌",index:2},afternoon:{area:"札幌",index:0},evening:{area:"札幌",index:1},food:{area:"札幌",index:1},note:"輕鬆收尾，狸小路最後掃貨"},
+        {label:"Day 6",theme:"回程日",badge:"無條件清空",morning:null,afternoon:null,evening:null,food:null,note:"早上咖啡，包車送機場"}
+      ]
+    }
+  },
+  okinawa:{
+    spots:{
+      "那霸":[
+        {name:"國際通商店街",tip:"土產掃貨首選，包車停國際通駐車場",km:0,driveMin:0,stayMin:90},
+        {name:"牧志公設市場",tip:"沖繩食材，國際通走3分",km:0,driveMin:3,stayMin:60},
+        {name:"首里城公園",tip:"世界遺產，包車停首里城公園駐車場",km:5,driveMin:15,stayMin:90},
+        {name:"波上宮・波之上海灘",tip:"那霸市區最近的海灘，包車10分",km:3,driveMin:10,stayMin:45}
+      ],
+      "南部":[
+        {name:"瀬長島海濱公園",tip:"夕陽最美，飛機起降可拍，包車20分",km:14,driveMin:25,stayMin:60},
+        {name:"知念岬公園",tip:"免費，海景壯觀，包車35分",km:35,driveMin:45,stayMin:45},
+        {name:"斎場御嶽（世界遺產）",tip:"琉球最重要聖地，知念岬旁5分",km:36,driveMin:46,stayMin:60}
+      ],
+      "北部":[
+        {name:"沖繩美麗海水族館",tip:"鯨鯊必看，包車從那霸出發90分",km:95,driveMin:90,stayMin:180},
+        {name:"古宇利島・古宇利大橋",tip:"開車上橋海景無敵，水族館附近30分",km:80,driveMin:75,stayMin:60},
+        {name:"名護鳳梨公園",tip:"鳳梨主題樂園，水族館途中停",km:70,driveMin:65,stayMin:60}
+      ]
+    },
+    restaurants:{
+      "那霸":[
+        {name:"沖繩そば 二合半",backup:"A&W（沖繩限定）",tag:"沖繩麵"},
+        {name:"ゆうなんぎぃ（沖繩家庭料理）",backup:"附近定食屋",tag:"沖繩料理"}
+      ],
+      "南部":[{name:"瀬長島ウミカジテラス",backup:"便利商店野餐",tag:"海景"}],
+      "北部":[{name:"水族館附設餐廳",backup:"附近食堂",tag:"海景"}]
+    },
+    days:{
+      "5":[
+        {label:"Day 1",theme:"到達・那霸",badge:"今天只走一條街",morning:null,afternoon:{area:"那霸",index:0},evening:{area:"那霸",index:1},food:{area:"那霸",index:0},note:"抵達日，包車接機後國際通"},
+        {label:"Day 2",theme:"首里城・南部",badge:"包車文化日",morning:{area:"那霸",index:2},afternoon:{area:"南部",index:0},evening:{area:"南部",index:1},food:{area:"那霸",index:1},note:"包車首里城→瀬長島夕陽"},
+        {label:"Day 3",theme:"美麗海水族館",badge:"⚠️ 包車才划算",morning:{area:"北部",index:0},afternoon:{area:"北部",index:1},evening:null,food:{area:"北部",index:0},note:"包車從那霸出發90分，建議早出發"},
+        {label:"Day 4",theme:"南部・聖地巡禮",badge:"包車世界遺產",morning:{area:"南部",index:2},afternoon:{area:"南部",index:0},evening:{area:"那霸",index:3},food:{area:"南部",index:0},note:"斎場御嶽→瀬長島→那霸夜市"},
+        {label:"Day 5",theme:"回程日",badge:"無條件清空",morning:null,afternoon:null,evening:null,food:null,note:"早上海邊，包車送機場"}
+      ],
+      "6":[
+        {label:"Day 1",theme:"到達・那霸",badge:"今天只走一條街",morning:null,afternoon:{area:"那霸",index:0},evening:{area:"那霸",index:1},food:{area:"那霸",index:0},note:"抵達日輕鬆"},
+        {label:"Day 2",theme:"首里城・那霸深度",badge:"包車文化日",morning:{area:"那霸",index:2},afternoon:{area:"那霸",index:0},evening:{area:"那霸",index:3},food:{area:"那霸",index:1},note:"包車首里城→波上宮海灘"},
+        {label:"Day 3",theme:"美麗海水族館",badge:"⚠️ 包車才划算",morning:{area:"北部",index:0},afternoon:{area:"北部",index:1},evening:{area:"北部",index:2},food:{area:"北部",index:0},note:"包車從那霸出發90分"},
+        {label:"Day 4",theme:"南部・世界遺產",badge:"包車聖地日",morning:{area:"南部",index:2},afternoon:{area:"南部",index:1},evening:{area:"南部",index:0},food:{area:"南部",index:0},note:"斎場御嶽→知念岬→瀬長島夕陽"},
+        {label:"Day 5",theme:"那霸・最後掃貨",badge:"悠閒收尾",morning:{area:"那霸",index:1},afternoon:{area:"那霸",index:0},evening:null,food:{area:"那霸",index:0},note:"公設市場→國際通"},
+        {label:"Day 6",theme:"回程日",badge:"無條件清空",morning:null,afternoon:null,evening:null,food:null,note:"早上海邊，包車送機場"}
+      ]
+    }
+  }
+};
+ 
+const MULTI={
+  osaka_kyoto:{
+    label:'大阪・京都 → 奈良',
+    spots:{
+      "難波":[
+        {name:"道頓堀・グリコ看板",tip:"晚上霓虹最美",km:0,driveMin:0,stayMin:40},
+        {name:"心齋橋商圈",tip:"藥妝掃貨首選",km:1,driveMin:5,stayMin:90},
+        {name:"黑門市場",tip:"早上9點前最新鮮",km:1,driveMin:5,stayMin:60}
+      ],
+      "京都東山":[
+        {name:"清水寺",tip:"上午10點前到，包車停產寧坂",km:75,driveMin:70,stayMin:90},
+        {name:"二年坂・三年坂",tip:"清水寺走下來就到",km:75,driveMin:70,stayMin:60},
+        {name:"八坂神社",tip:"免費，包車停祇園停車場",km:73,driveMin:67,stayMin:30}
+      ],
+      "伏見":[
+        {name:"伏見稻荷大社",tip:"⚠️ 早上7:30前到千本鳥居無人",km:70,driveMin:65,stayMin:90},
+        {name:"月桂冠大倉紀念館",tip:"日本酒試飲，稻荷附近5分",km:68,driveMin:63,stayMin:60}
+      ],
+      "奈良":[
+        {name:"奈良公園・鹿群",tip:"鹿仙貝公園入口買，包車停春日野道",km:95,driveMin:85,stayMin:60},
+        {name:"東大寺大佛殿",tip:"世界最大木造建築，早上9點開門",km:96,driveMin:86,stayMin:90},
+        {name:"春日大社",tip:"東大寺走10分，樹蔭涼爽",km:97,driveMin:87,stayMin:60},
+        {name:"ならまち（奈良町）",tip:"老街咖啡廳，下午最悠閒",km:94,driveMin:84,stayMin:90}
+      ]
+    },
+    restaurants:{
+      "難波":[
+        {name:"一蘭拉麵 道頓堀店",backup:"金龍拉麵",tag:"拉麵"},
+        {name:"燒肉力丸 心齋橋店",backup:"壽司郎 難波",tag:"燒肉"}
+      ],
+      "京都東山":[{name:"奧丹清水",backup:"京豆腐藤野",tag:"傳統料理"}],
+      "奈良":[
+        {name:"奈良 山崎屋（柿葉壽司）",backup:"附近定食屋",tag:"鄉土料理"},
+        {name:"ならまち咖啡廳",backup:"便利商店",tag:"輕食"}
+      ]
+    },
+    days:{
+      "5":[
+        {label:"Day 1",theme:"到達・難波",badge:"今天只走一條街",hotel:"大阪",moveDay:false,from:null,to:null,morning:null,afternoon:{area:"難波",index:0},evening:{area:"難波",index:1},food:{area:"難波",index:0},note:"抵達日，包車接機後輕鬆逛"},
+        {label:"Day 2",theme:"京都・東山線",badge:"⚠️ 稻荷早上去",hotel:"大阪",moveDay:false,from:null,to:null,morning:{area:"伏見",index:0},afternoon:{area:"京都東山",index:0},evening:{area:"京都東山",index:2},food:{area:"京都東山",index:0},note:"包車從難波出發70分"},
+        {label:"Day 3",theme:"大阪 → 奈良",badge:"🧳 移動日",hotel:"奈良",moveDay:true,from:"大阪",to:"奈良",luggageTip:"大阪→奈良包車約85分，行李寄放奈良飯店",morning:{area:"奈良",index:0},afternoon:{area:"奈良",index:1},evening:null,food:{area:"奈良",index:0},travel:"包車 大阪難波→奈良 約 85 分鐘",note:"⚠️ 移動日含交通，抵達後安排2-3個景點"},
+        {label:"Day 4",theme:"奈良・深度散步",badge:"老街慢走日",hotel:"奈良",moveDay:false,from:null,to:null,morning:{area:"奈良",index:2},afternoon:{area:"奈良",index:3},evening:null,food:{area:"奈良",index:1},note:"春日大社人少，ならまち下午最悠閒"},
+        {label:"Day 5",theme:"回程日",badge:"無條件清空",hotel:null,moveDay:false,from:null,to:null,morning:null,afternoon:null,evening:null,food:null,note:"早上咖啡，包車送機場"}
+      ],
+      "6":[
+        {label:"Day 1",theme:"到達・難波",badge:"今天只走一條街",hotel:"大阪",moveDay:false,from:null,to:null,morning:null,afternoon:{area:"難波",index:0},evening:{area:"難波",index:1},food:{area:"難波",index:0},note:"抵達日輕鬆"},
+        {label:"Day 2",theme:"大阪精華日",badge:"包車全日",hotel:"大阪",moveDay:false,from:null,to:null,morning:{area:"難波",index:2},afternoon:{area:"難波",index:0},evening:null,food:{area:"難波",index:1},note:"黑門市場早上，下午心齋橋"},
+        {label:"Day 3",theme:"京都・東山線",badge:"⚠️ 稻荷早上去",hotel:"大阪",moveDay:false,from:null,to:null,morning:{area:"伏見",index:0},afternoon:{area:"京都東山",index:0},evening:{area:"京都東山",index:2},food:{area:"京都東山",index:0},note:"包車從難波出發70分"},
+        {label:"Day 4",theme:"大阪 → 奈良",badge:"🧳 移動日",hotel:"奈良",moveDay:true,from:"大阪",to:"奈良",luggageTip:"行李可寄放奈良飯店，輕裝遊奈良",morning:{area:"奈良",index:0},afternoon:{area:"奈良",index:1},evening:null,food:{area:"奈良",index:0},travel:"包車 約 85 分鐘",note:"移動日包含交通約85分"},
+        {label:"Day 5",theme:"奈良・深度散步",badge:"老街慢走日",hotel:"奈良",moveDay:false,from:null,to:null,morning:{area:"奈良",index:2},afternoon:{area:"奈良",index:3},evening:null,food:{area:"奈良",index:1},note:"春日大社人少，ならまち最舒服"},
+        {label:"Day 6",theme:"回程日",badge:"無條件清空",hotel:null,moveDay:false,from:null,to:null,morning:null,afternoon:null,evening:null,food:null,note:"早上咖啡，包車送機場"}
+      ]
+    }
+  },
+  tokyo:{
+    label:'東京 → 箱根 → 熱海',
+    spots:{
+      "新宿":[
+        {name:"新宿歌舞伎町・東寶大樓",tip:"哥吉拉在頂樓，晚上必拍",km:0,driveMin:0,stayMin:40},
+        {name:"新宿御苑",tip:"白天散步，包車停新宿門",km:1,driveMin:5,stayMin:90},
+        {name:"Donki 新宿本店",tip:"掃貨必去，24小時",km:1,driveMin:5,stayMin:90}
+      ],
+      "淺草":[
+        {name:"淺草寺・仲見世通",tip:"早上8點前到，包車停雷門前",km:12,driveMin:35,stayMin:90},
+        {name:"隅田川・吾妻橋",tip:"晴空塔背景，淺草寺走5分",km:12,driveMin:35,stayMin:30}
+      ],
+      "澀谷":[
+        {name:"澀谷十字路口",tip:"傍晚人潮最壯觀，包車停Bunkamura",km:11,driveMin:32,stayMin:40},
+        {name:"澀谷天空展望台",tip:"需預約，夜景必看",km:11,driveMin:32,stayMin:90},
+        {name:"代官山蔦屋書店",tip:"澀谷旁10分，咖啡廳網美最愛",km:12,driveMin:35,stayMin:60}
+      ],
+      "箱根":[
+        {name:"箱根神社・平和の鳥居",tip:"湖中鳥居，早上水面倒影，包車停箱根神社前",km:95,driveMin:90,stayMin:60},
+        {name:"大涌谷・黑玉子",tip:"⚠️ 確認開放，火山地形壯觀",km:100,driveMin:95,stayMin:75},
+        {name:"箱根開放式野外美術館",tip:"雕塑公園，雨天也有室內區",km:93,driveMin:88,stayMin:120},
+        {name:"蘆之湖遊覧船",tip:"天氣好時富士山清晰可見",km:96,driveMin:91,stayMin:75},
+        {name:"箱根湯本・温泉街",tip:"收工前泡腳湯，包車送回飯店",km:87,driveMin:82,stayMin:60}
+      ],
+      "熱海":[
+        {name:"熱海サンビーチ",tip:"海灘步道，早晨散步最舒服",km:130,driveMin:110,stayMin:60},
+        {name:"熱海城・錦ヶ浦",tip:"山頂展望台，俯瞰相模灣",km:132,driveMin:112,stayMin:60},
+        {name:"起雲閣（歷史建築）",tip:"近代洋館，免費拍照點多",km:131,driveMin:111,stayMin:75},
+        {name:"熱海プリン本店",tip:"超人氣布丁，排隊20分內值得",km:130,driveMin:110,stayMin:30}
+      ]
+    },
+    restaurants:{
+      "新宿":[
+        {name:"一蘭拉麵 新宿店",backup:"松屋 新宿",tag:"拉麵"},
+        {name:"鳥貴族 新宿店",backup:"吉野家",tag:"居酒屋"}
+      ],
+      "淺草":[{name:"駒形どぜう（泥鰍鍋）",backup:"天丼 金子半之助",tag:"老字號"}],
+      "箱根":[
+        {name:"箱根湯本・箱根 Bakery",backup:"溫泉饅頭老街",tag:"輕食"},
+        {name:"竹の家（箱根湯本）",backup:"附近蕎麥麵店",tag:"會席"}
+      ],
+      "熱海":[
+        {name:"熱海銀座食堂街",backup:"附近迴轉壽司",tag:"海鮮"},
+        {name:"平和通り 魚介丼",backup:"便利商店",tag:"海鮮丼"}
+      ]
+    },
+    days:{
+      "5":[
+        {label:"Day 1",theme:"到達・東京",badge:"今天只走一條街",hotel:"東京",moveDay:false,from:null,to:null,morning:null,afternoon:{area:"新宿",index:0},evening:{area:"新宿",index:2},food:{area:"新宿",index:0},note:"抵達日輕鬆，包車接機後新宿"},
+        {label:"Day 2",theme:"東京探索",badge:"包車全日",hotel:"東京",moveDay:false,from:null,to:null,morning:{area:"淺草",index:0},afternoon:{area:"澀谷",index:0},evening:{area:"澀谷",index:1},food:{area:"淺草",index:0},note:"包車淺草→澀谷，淺草35分"},
+        {label:"Day 3",theme:"東京 → 箱根",badge:"🧳 移動日",hotel:"箱根",moveDay:true,from:"東京",to:"箱根",luggageTip:"前一晚從東京飯店寄出宅配，箱根飯店隔天收到",morning:{area:"箱根",index:0},afternoon:null,evening:null,food:{area:"箱根",index:0},travel:"包車 東京→箱根 約 90 分鐘",note:"⚠️ 移動日包含90分車程"},
+        {label:"Day 4",theme:"箱根・溫泉と自然",badge:"主力景觀日",hotel:"箱根",moveDay:false,from:null,to:null,morning:{area:"箱根",index:1},afternoon:{area:"箱根",index:2},evening:{area:"箱根",index:3},food:{area:"箱根",index:1},note:"大涌谷→美術館→遊船，包車全日"},
+        {label:"Day 5",theme:"回程日",badge:"無條件清空",hotel:null,moveDay:false,from:null,to:null,morning:null,afternoon:null,evening:null,food:null,note:"早上溫泉，包車送機場"}
+      ],
+      "6":[
+        {label:"Day 1",theme:"到達・東京",badge:"今天只走一條街",hotel:"東京",moveDay:false,from:null,to:null,morning:null,afternoon:{area:"新宿",index:0},evening:{area:"新宿",index:2},food:{area:"新宿",index:0},note:"抵達日輕鬆"},
+        {label:"Day 2",theme:"東京・淺草代官山",badge:"包車全日",hotel:"東京",moveDay:false,from:null,to:null,morning:{area:"淺草",index:0},afternoon:{area:"澀谷",index:2},evening:{area:"澀谷",index:1},food:{area:"澀谷",index:0},note:"淺草35分→代官山→澀谷天空"},
+        {label:"Day 3",theme:"東京 → 箱根",badge:"🧳 移動日",hotel:"箱根",moveDay:true,from:"東京",to:"箱根",luggageTip:"前一晚從東京飯店寄出宅配",morning:{area:"箱根",index:0},afternoon:null,evening:null,food:{area:"箱根",index:0},travel:"包車 約 90 分鐘",note:"⚠️ 移動日含90分車程"},
+        {label:"Day 4",theme:"箱根 → 熱海",badge:"🧳 移動日・景觀接力",hotel:"熱海",moveDay:true,from:"箱根",to:"熱海",luggageTip:"箱根→熱海包車約45分，行李直接帶上車",morning:{area:"箱根",index:1},afternoon:{area:"箱根",index:2},evening:null,food:{area:"箱根",index:1},travel:"包車 箱根→熱海 約 45 分鐘",note:"下午遊完直接移動熱海"},
+        {label:"Day 5",theme:"熱海・海岸散步",badge:"輕鬆海邊日",hotel:"熱海",moveDay:false,from:null,to:null,morning:{area:"熱海",index:0},afternoon:{area:"熱海",index:2},evening:{area:"熱海",index:3},food:{area:"熱海",index:0},note:"熱海很小，包車停海邊停車場"},
+        {label:"Day 6",theme:"回程日",badge:"無條件清空",hotel:null,moveDay:false,from:null,to:null,morning:null,afternoon:null,evening:null,food:null,note:"早上布丁，包車送東京機場"}
+      ]
+    }
+  },
+  hokkaido:{
+    label:'札幌 → 富良野 → 美瑛',
+    spots:{
+      "札幌":[
+        {name:"狸小路商店街",tip:"室內購物，雨天也OK",km:0,driveMin:0,stayMin:90},
+        {name:"薄野・夜景",tip:"北海道夜生活中心",km:1,driveMin:5,stayMin:60},
+        {name:"大通公園",tip:"季節活動多",km:1,driveMin:5,stayMin:45}
+      ],
+      "小樽":[
+        {name:"小樽運河",tip:"黃昏最美，路燈亮起時必拍",km:40,driveMin:45,stayMin:60},
+        {name:"堺町通・玻璃工藝街",tip:"北一硝子不能錯過",km:40,driveMin:45,stayMin:90}
+      ],
+      "富良野":[
+        {name:"富田農場（薰衣草）",tip:"7月最盛開，早上光線好",km:160,driveMin:130,stayMin:90},
+        {name:"富良野起司工房",tip:"現做起司免費試吃",km:158,driveMin:128,stayMin:45},
+        {name:"北西の丘展望公園",tip:"360度丘陵景色，日落必拍",km:155,driveMin:125,stayMin:40}
+      ],
+      "美瑛":[
+        {name:"拼布之路・丘陵景觀",tip:"⚠️ 景點分散，包車才跑得完",km:175,driveMin:140,stayMin:90},
+        {name:"青池（白金青い池）",tip:"神秘藍色水池，早上光線最好",km:180,driveMin:145,stayMin:60},
+        {name:"四季彩之丘",tip:"花田分區，適合拍照",km:173,driveMin:138,stayMin:60},
+        {name:"新榮之丘展望公園",tip:"夕陽聖地，免費，包車最後一站",km:170,driveMin:135,stayMin:30}
+      ]
+    },
+    restaurants:{
+      "札幌":[
+        {name:"札幌味噌拉麵 けやき",backup:"一幻蝦味噌拉麵",tag:"拉麵"},
+        {name:"二条市場・海鮮丼",backup:"附近迴轉壽司",tag:"海鮮"}
+      ],
+      "小樽":[{name:"小樽政寿司",backup:"壽司 根室花まる",tag:"壽司"}],
+      "富良野":[{name:"富田農場餐廳",backup:"附近咖啡廳",tag:"定食"}],
+      "美瑛":[{name:"美瑛選果（農場直送）",backup:"美瑛附近咖啡廳",tag:"農場料理"}]
+    },
+    days:{
+      "5":[
+        {label:"Day 1",theme:"到達・札幌",badge:"今天只走一條街",hotel:"札幌",moveDay:false,from:null,to:null,morning:null,afternoon:{area:"札幌",index:0},evening:{area:"札幌",index:1},food:{area:"札幌",index:0},note:"抵達日，包車接機"},
+        {label:"Day 2",theme:"小樽・日歸",badge:"海港包車日",hotel:"札幌",moveDay:false,from:null,to:null,morning:{area:"小樽",index:0},afternoon:{area:"小樽",index:1},evening:{area:"札幌",index:2},food:{area:"小樽",index:0},note:"包車從札幌出發45分"},
+        {label:"Day 3",theme:"札幌 → 富良野",badge:"🧳 移動日",hotel:"富良野",moveDay:true,from:"札幌",to:"富良野",luggageTip:"前一晚從札幌飯店寄出宅配，富良野飯店隔天收到",morning:{area:"富良野",index:0},afternoon:null,evening:null,food:{area:"富良野",index:0},travel:"包車 札幌→富良野 約 130 分鐘",note:"⚠️ 移動日含130分車程，建議早出發"},
+        {label:"Day 4",theme:"富良野・美瑛",badge:"包車全日制",hotel:"富良野",moveDay:false,from:null,to:null,morning:{area:"美瑛",index:0},afternoon:{area:"美瑛",index:1},evening:{area:"富良野",index:2},food:{area:"美瑛",index:0},note:"⚠️ 美瑛景點分散，非包車無法完成"},
+        {label:"Day 5",theme:"回程日",badge:"無條件清空",hotel:null,moveDay:false,from:null,to:null,morning:null,afternoon:null,evening:null,food:null,note:"早上咖啡，包車送新千歲機場"}
+      ],
+      "6":[
+        {label:"Day 1",theme:"到達・札幌",badge:"今天只走一條街",hotel:"札幌",moveDay:false,from:null,to:null,morning:null,afternoon:{area:"札幌",index:0},evening:{area:"札幌",index:1},food:{area:"札幌",index:0},note:"抵達日輕鬆"},
+        {label:"Day 2",theme:"小樽・日歸",badge:"海港包車日",hotel:"札幌",moveDay:false,from:null,to:null,morning:{area:"小樽",index:0},afternoon:{area:"小樽",index:1},evening:{area:"札幌",index:2},food:{area:"小樽",index:0},note:"包車出發45分"},
+        {label:"Day 3",theme:"札幌 → 富良野",badge:"🧳 移動日",hotel:"富良野",moveDay:true,from:"札幌",to:"富良野",luggageTip:"前一晚從札幌飯店寄出宅配",morning:{area:"富良野",index:0},afternoon:null,evening:null,food:{area:"富良野",index:0},travel:"包車 約 130 分鐘",note:"⚠️ 含130分車程"},
+        {label:"Day 4",theme:"富良野・薰衣草",badge:"花田主力日",hotel:"富良野",moveDay:false,from:null,to:null,morning:{area:"富良野",index:1},afternoon:{area:"富良野",index:2},evening:null,food:{area:"富良野",index:0},note:"富良野農場群，步調輕鬆"},
+        {label:"Day 5",theme:"美瑛・丘陵景觀",badge:"包車必選",hotel:"富良野",moveDay:false,from:null,to:null,morning:{area:"美瑛",index:0},afternoon:{area:"美瑛",index:2},evening:{area:"美瑛",index:3},food:{area:"美瑛",index:0},note:"⚠️ 非包車無法完成"},
+        {label:"Day 6",theme:"回程日",badge:"無條件清空",hotel:null,moveDay:false,from:null,to:null,morning:null,afternoon:null,evening:null,food:null,note:"早上咖啡，包車送機場"}
+      ]
+    }
+  },
+  okinawa:{
+    label:'那霸 → 石垣島',
+    spots:{
+      "那霸":[
+        {name:"國際通商店街",tip:"土產掃貨，包車停國際通駐車場",km:0,driveMin:0,stayMin:90},
+        {name:"牧志公設市場",tip:"沖繩食材，國際通走3分",km:0,driveMin:3,stayMin:60},
+        {name:"首里城公園",tip:"世界遺產，包車停首里城駐車場",km:5,driveMin:15,stayMin:90}
+      ],
+      "南部":[
+        {name:"瀬長島海濱公園",tip:"夕陽最美，包車20分",km:14,driveMin:25,stayMin:60},
+        {name:"知念岬公園",tip:"免費，海景壯觀，包車35分",km:35,driveMin:45,stayMin:45}
+      ],
+      "石垣島":[
+        {name:"川平灣",tip:"沖繩最美海灣，玻璃底船必搭",km:560,driveMin:0,stayMin:90},
+        {name:"石垣島燈塔・禦神崎",tip:"珊瑚礁海岸，日落必拍",km:562,driveMin:0,stayMin:60},
+        {name:"底地海灘",tip:"淺灘透明，浮潛首選",km:558,driveMin:0,stayMin:90},
+        {name:"石垣やいま村",tip:"琉球古民家，體驗傳統文化",km:555,driveMin:0,stayMin:75}
+      ],
+      "竹富島":[
+        {name:"竹富島・水牛車",tip:"珊瑚礁小島，水牛車必做",km:561,driveMin:0,stayMin:60},
+        {name:"西桟橋",tip:"日落聖地，傍晚必去",km:561,driveMin:0,stayMin:30},
+        {name:"星砂の浜",tip:"找星沙，早上人最少",km:561,driveMin:0,stayMin:45}
+      ]
+    },
+    restaurants:{
+      "那霸":[
+        {name:"沖繩そば 二合半",backup:"A&W（沖繩限定）",tag:"沖繩麵"},
+        {name:"ゆうなんぎぃ",backup:"附近定食屋",tag:"沖繩料理"}
+      ],
+      "石垣島":[
+        {name:"石垣牛燒肉 あんつく",backup:"石垣港離島ターミナル食堂",tag:"石垣牛"},
+        {name:"南の島の星まつり",backup:"附近居酒屋",tag:"海鮮"}
+      ],
+      "竹富島":[{name:"竹富島 かにふ",backup:"島上便當",tag:"島料理"}]
+    },
+    days:{
+      "5":[
+        {label:"Day 1",theme:"到達・那霸",badge:"今天只走一條街",hotel:"那霸",moveDay:false,from:null,to:null,morning:null,afternoon:{area:"那霸",index:0},evening:{area:"那霸",index:1},food:{area:"那霸",index:0},note:"抵達日，包車接機後國際通"},
+        {label:"Day 2",theme:"首里城・南部",badge:"包車文化日",hotel:"那霸",moveDay:false,from:null,to:null,morning:{area:"那霸",index:2},afternoon:{area:"南部",index:0},evening:{area:"南部",index:1},food:{area:"那霸",index:1},note:"包車首里城→瀬長島夕陽"},
+        {label:"Day 3",theme:"那霸 → 石垣島",badge:"🧳 移動日・離島飛行",hotel:"石垣島",moveDay:true,from:"那霸",to:"石垣島",luggageTip:"那霸→石垣島搭飛機約55分，行李直接托運",morning:{area:"石垣島",index:0},afternoon:null,evening:null,food:{area:"石垣島",index:0},travel:"✈️ ANA/JTA 那霸→石垣 約 55 分鐘",note:"⚠️ 飛機移動，抵達後包車遊石垣"},
+        {label:"Day 4",theme:"石垣・竹富島",badge:"海洋主力日",hotel:"石垣島",moveDay:false,from:null,to:null,morning:{area:"石垣島",index:2},afternoon:{area:"竹富島",index:0},evening:{area:"竹富島",index:1},food:{area:"石垣島",index:1},note:"石垣包車→竹富島渡輪10分"},
+        {label:"Day 5",theme:"回程日",badge:"無條件清空",hotel:null,moveDay:false,from:null,to:null,morning:null,afternoon:null,evening:null,food:null,note:"早上海邊，飛回那霸轉機"}
+      ],
+      "6":[
+        {label:"Day 1",theme:"到達・那霸",badge:"今天只走一條街",hotel:"那霸",moveDay:false,from:null,to:null,morning:null,afternoon:{area:"那霸",index:0},evening:{area:"那霸",index:1},food:{area:"那霸",index:0},note:"抵達日輕鬆"},
+        {label:"Day 2",theme:"首里城・南部",badge:"包車文化日",hotel:"那霸",moveDay:false,from:null,to:null,morning:{area:"那霸",index:2},afternoon:{area:"南部",index:0},evening:{area:"南部",index:1},food:{area:"那霸",index:1},note:"包車首里城→瀬長島"},
+        {label:"Day 3",theme:"那霸 → 石垣島",badge:"🧳 移動日・離島飛行",hotel:"石垣島",moveDay:true,from:"那霸",to:"石垣島",luggageTip:"那霸→石垣島飛機約55分",morning:{area:"石垣島",index:0},afternoon:null,evening:null,food:{area:"石垣島",index:0},travel:"✈️ ANA/JTA 約 55 分鐘",note:"⚠️ 飛機移動"},
+        {label:"Day 4",theme:"石垣島・珊瑚礁",badge:"海洋主力日",hotel:"石垣島",moveDay:false,from:null,to:null,morning:{area:"石垣島",index:1},afternoon:{area:"石垣島",index:2},evening:null,food:{area:"石垣島",index:1},note:"燈塔→浮潛，包車全日"},
+        {label:"Day 5",theme:"竹富島・水牛車",badge:"離島一日遊",hotel:"石垣島",moveDay:false,from:null,to:null,morning:{area:"竹富島",index:0},afternoon:{area:"竹富島",index:1},evening:{area:"竹富島",index:2},food:{area:"竹富島",index:0},note:"竹富島渡輪往返10分"},
+        {label:"Day 6",theme:"回程日",badge:"無條件清空",hotel:null,moveDay:false,from:null,to:null,morning:null,afternoon:null,evening:null,food:null,note:"早上海邊，飛回那霸轉機"}
+      ]
+    }
+  }
+};
+ 
+// ── 地區座標表（包車實際行車距離用 Haversine 估算）────────
+const COORDS={
+  "難波":    {lat:34.6686,lng:135.5023},
+  "大阪城":  {lat:34.6873,lng:135.5262},
+  "京都東山":{lat:34.9953,lng:135.7852},
+  "伏見":    {lat:34.9399,lng:135.7688},
+  "嵐山":    {lat:35.0094,lng:135.6780},
+  "梅田":    {lat:34.7024,lng:135.4959},
+  "奈良":    {lat:34.6851,lng:135.8050},
+  "新宿":    {lat:35.6896,lng:139.6921},
+  "淺草":    {lat:35.7148,lng:139.7967},
+  "銀座":    {lat:35.6717,lng:139.7650},
+  "原宿":    {lat:35.6702,lng:139.7026},
+  "澀谷":    {lat:35.6580,lng:139.7016},
+  "箱根":    {lat:35.2327,lng:139.1069},
+  "熱海":    {lat:35.0966,lng:139.0730},
+  "札幌":    {lat:43.0618,lng:141.3545},
+  "小樽":    {lat:43.1907,lng:140.9940},
+  "富良野":  {lat:43.3423,lng:142.3831},
+  "美瑛":    {lat:43.5928,lng:142.4698},
+  "那霸":    {lat:26.2124,lng:127.6809},
+  "南部":    {lat:26.0962,lng:127.6880},
+  "北部":    {lat:26.6324,lng:128.0470},
+  "石垣島":  {lat:24.3336,lng:124.1543},
+  "竹富島":  {lat:24.3222,lng:124.0922},
+};
+ 
+// 城市名稱 → 代表座標
+const CITY_COORD={
+  "大阪":COORDS["難波"],"京都":COORDS["京都東山"],"奈良":COORDS["奈良"],
+  "神戶":   {lat:34.6901,lng:135.1956},
+  "京都嵐山":{lat:35.0094,lng:135.6780},
+  "姬路":   {lat:34.8394,lng:134.6939},
+  "和歌山": {lat:34.2261,lng:135.1675},
+  "伊勢":   {lat:34.4889,lng:136.7072},
+  "東京":COORDS["新宿"],
+  "箱根":   {lat:35.2327,lng:139.1069},
+  "鎌倉":   {lat:35.3197,lng:139.5502},
+  "熱海":   {lat:35.0966,lng:139.0730},
+  "日光":   {lat:36.7580,lng:139.5994},
+  "富士山": {lat:35.3606,lng:138.7274},
+  "川越":   {lat:35.9251,lng:139.4856},
+  "橫濱":   {lat:35.4437,lng:139.6380},
+  "札幌":COORDS["札幌"],"富良野":COORDS["富良野"],"美瑛":COORDS["美瑛"],
+  "小樽":COORDS["小樽"],
+  "登別":   {lat:42.4681,lng:141.1058},
+  "函館":   {lat:41.7686,lng:140.7290},
+  "洞爺湖": {lat:42.5487,lng:140.7795},
+  "那霸":COORDS["那霸"],"石垣島":COORDS["石垣島"],"竹富島":COORDS["竹富島"],
+  "宮古島": {lat:24.8050,lng:125.2814},
+  "本部":   {lat:26.6324,lng:127.8866},
+  "南城":   {lat:26.1144,lng:127.7922},
+  "中部":   {lat:26.3440,lng:127.7550},
+  "久米島": {lat:26.3407,lng:126.7947},
+};
+ 
+// 每個主城市可選的延伸目的地 + 每個目的地的景點資料
+const DEST_CITIES={
+  osaka_kyoto:{
+    destinations:[
+      {city:"奈良",  driveH:1.4, nextDests:["神戶","京都嵐山","姬路"], spots:[
+        {name:"奈良公園・鹿群",    tip:"鹿仙貝入口買，傍晚鹿最活躍", km:95,driveMin:85,stayMin:60},
+        {name:"東大寺大佛殿",      tip:"世界最大木造建築，早上9點開門",km:96,driveMin:86,stayMin:90},
+        {name:"春日大社",          tip:"東大寺走10分，樹蔭涼爽",      km:97,driveMin:87,stayMin:60},
+        {name:"ならまち（奈良町）",tip:"老街咖啡廳，下午最悠閒",      km:94,driveMin:84,stayMin:90},
+        {name:"若草山",            tip:"山頂360度，傍晚金色最美",     km:98,driveMin:88,stayMin:45}
+      ]},
+      {city:"神戶",  driveH:0.75, nextDests:["奈良","姬路","和歌山"], spots:[
+        {name:"北野異人館街",      tip:"西洋建築群，包車停異人館駐車場",km:32,driveMin:35,stayMin:90},
+        {name:"南京町（神戶中華街）",tip:"餃子・肉包現做現吃",        km:30,driveMin:32,stayMin:60},
+        {name:"神戶港・ハーバーランド",tip:"夜景一流，包車送到港口",  km:31,driveMin:33,stayMin:60},
+        {name:"有馬温泉",          tip:"日本最古老溫泉，神戶包車35分",km:45,driveMin:40,stayMin:90},
+        {name:"明石海峡大橋",      tip:"世界最長吊橋，橋下公園拍照",  km:38,driveMin:38,stayMin:45}
+      ]},
+      {city:"京都嵐山", driveH:1.25, nextDests:["奈良","神戶","姬路"], spots:[
+        {name:"嵐山竹林",          tip:"早上7點前無人，包車停嵐山公園",km:90,driveMin:80,stayMin:40},
+        {name:"渡月橋",            tip:"秋天楓葉最美，竹林走10分",    km:89,driveMin:78,stayMin:30},
+        {name:"天龍寺庭園",        tip:"史蹟庭園，門票500円",         km:89,driveMin:79,stayMin:60},
+        {name:"嵯峨野古道",        tip:"人力車拍照聖地",              km:89,driveMin:79,stayMin:50},
+        {name:"常寂光寺",          tip:"嵐山最美紅葉寺，人少清幽",    km:91,driveMin:81,stayMin:45}
+      ]},
+      {city:"姬路",  driveH:1.2, nextDests:["神戶","和歌山","奈良"], spots:[
+        {name:"姬路城",            tip:"日本最美天守閣・白鷺城，包車停東門",km:70,driveMin:65,stayMin:120},
+        {name:"好古園（姬路城庭園）",tip:"姬路城旁，和式庭園",        km:70,driveMin:65,stayMin:60},
+        {name:"書寫山圓教寺",      tip:"ラストサムライ拍攝地，纜車上山",km:75,driveMin:70,stayMin:90},
+        {name:"姬路市立動物園",    tip:"姬路城內，門票便宜，親子首選",km:70,driveMin:65,stayMin:75},
+        {name:"太陽公園",          tip:"兵馬俑・凱旋門複製景點，獨特打卡",km:78,driveMin:72,stayMin:90}
+      ]},
+      {city:"和歌山", driveH:1.5, nextDests:["神戶","姬路"], spots:[
+        {name:"和歌山城",          tip:"虎伏山上天守閣，市區包車30分",km:85,driveMin:80,stayMin:75},
+        {name:"高野山奥之院",      tip:"日本最神聖靈場，苔蘚參道震撼",km:110,driveMin:100,stayMin:120},
+        {name:"那智瀑布・那智大社",tip:"日本最高瀑布133m，熊野古道入口",km:170,driveMin:150,stayMin:90},
+        {name:"白濱温泉・圓月島",  tip:"夕陽穿過岩洞，日本三古泉之一",km:120,driveMin:110,stayMin:75}
+      ]},
+      {city:"伊勢",  driveH:2.0, nextDests:["和歌山","奈良"], spots:[
+        {name:"伊勢神宮（內宮）",  tip:"日本最重要神社，包車停內宮駐車場",km:150,driveMin:130,stayMin:90},
+        {name:"おかげ横丁",        tip:"內宮前江戶老街，試吃伊勢名物",km:150,driveMin:130,stayMin:75},
+        {name:"夫婦岩（二見浦）",  tip:"日出聖地，日出前30分鐘最美",  km:145,driveMin:125,stayMin:45},
+        {name:"伊勢神宮（外宮）",  tip:"內宮前必先參拜，豐受大神",    km:148,driveMin:128,stayMin:60}
+      ]}
+    ]
+  },
+  tokyo:{
+    destinations:[
+      {city:"箱根",  driveH:1.5, nextDests:["熱海","富士山","鎌倉"], spots:[
+        {name:"箱根神社・平和の鳥居",tip:"湖中鳥居，早上水面倒影",  km:95,driveMin:90,stayMin:60},
+        {name:"大涌谷・黑玉子",    tip:"⚠️ 確認開放，火山地形壯觀",km:100,driveMin:95,stayMin:75},
+        {name:"箱根開放式野外美術館",tip:"雕塑公園，雨天也有室內區",km:93,driveMin:88,stayMin:120},
+        {name:"蘆之湖遊覧船",      tip:"天氣好時富士山清晰可見",    km:96,driveMin:91,stayMin:75},
+        {name:"箱根湯本・温泉街",  tip:"收工前泡腳湯",              km:87,driveMin:82,stayMin:60}
+      ]},
+      {city:"鎌倉",  driveH:1.0, nextDests:["熱海","箱根","橫濱"], spots:[
+        {name:"鎌倉大佛（高德院）",tip:"戶外大佛，包車停長谷停車場", km:55,driveMin:60,stayMin:60},
+        {name:"鶴岡八幡宮",        tip:"鎌倉最大神社，參道長500m",  km:53,driveMin:58,stayMin:60},
+        {name:"小町通（商店街）",  tip:"鎌倉土產掃貨，八幡宮旁",    km:53,driveMin:58,stayMin:60},
+        {name:"江之島",            tip:"海島神社，日落必看",          km:58,driveMin:63,stayMin:90},
+        {name:"長谷寺（鎌倉）",    tip:"繡球花聖地，大佛旁步行5分",  km:55,driveMin:60,stayMin:60}
+      ]},
+      {city:"熱海",  driveH:1.5, nextDests:["箱根","富士山","鎌倉"], spots:[
+        {name:"熱海サンビーチ",    tip:"海灘步道，早晨散步最舒服",  km:130,driveMin:110,stayMin:60},
+        {name:"熱海城・錦ヶ浦",    tip:"山頂展望台，俯瞰相模灣",    km:132,driveMin:112,stayMin:60},
+        {name:"起雲閣（歷史建築）",tip:"近代洋館，免費拍照點多",    km:131,driveMin:111,stayMin:75},
+        {name:"熱海プリン本店",    tip:"超人氣布丁，值得排隊",      km:130,driveMin:110,stayMin:30},
+        {name:"MOA美術館",         tip:"海景藝術館，能俯瞰相模灣",   km:131,driveMin:111,stayMin:90}
+      ]},
+      {city:"日光",  driveH:2.0, nextDests:["川越","橫濱"], spots:[
+        {name:"日光東照宮",        tip:"德川家康廟，包車停表參道停車場",km:155,driveMin:130,stayMin:120},
+        {name:"華嚴瀑布",          tip:"日本三大名瀑，東照宮旁20分",km:158,driveMin:133,stayMin:45},
+        {name:"中禪寺湖",          tip:"火山口湖，華嚴瀑布上方",    km:160,driveMin:135,stayMin:60},
+        {name:"日光二荒山神社",    tip:"東照宮旁，世界遺產群",       km:155,driveMin:130,stayMin:45},
+        {name:"龍頭瀑布",          tip:"中禪寺湖北岸，秋天楓葉絕景", km:165,driveMin:138,stayMin:40}
+      ]},
+      {city:"富士山", driveH:2.0, nextDests:["箱根","熱海"], spots:[
+        {name:"富士山五合目",      tip:"7-9月開山，包車停五合目",   km:145,driveMin:125,stayMin:90},
+        {name:"河口湖",            tip:"富士山倒影最美拍照點",       km:135,driveMin:115,stayMin:75},
+        {name:"忍野八海",          tip:"富士山伏流水湧出，河口湖旁",km:138,driveMin:118,stayMin:60},
+        {name:"富士五湖・山中湖",  tip:"富士山東側，天氣好必看",    km:140,driveMin:120,stayMin:60},
+        {name:"白絲瀑布（富士）",  tip:"富士山融雪形成，河口湖附近",km:133,driveMin:113,stayMin:40}
+      ]},
+      {city:"川越",  driveH:0.75, nextDests:["日光","橫濱"], spots:[
+        {name:"川越一番街（小江戶）",tip:"江戶風情老街，包車停中央停車場",km:40,driveMin:45,stayMin:90},
+        {name:"時之鐘",            tip:"川越地標，老街拍照必到",     km:40,driveMin:45,stayMin:30},
+        {name:"川越氷川神社",      tip:"緣結神社，彩色風鈴聞名",    km:41,driveMin:46,stayMin:45},
+        {name:"菓子屋横丁",        tip:"百年糖果老街，試吃天堂",    km:40,driveMin:45,stayMin:45}
+      ]},
+      {city:"橫濱",  driveH:0.5, nextDests:["鎌倉","川越"], spots:[
+        {name:"橫濱中華街",        tip:"日本最大中華街，包車停關帝廟旁",km:30,driveMin:35,stayMin:90},
+        {name:"山下公園・冰川丸",  tip:"港口散步，中華街走5分",     km:30,driveMin:35,stayMin:60},
+        {name:"橫濱紅磚倉庫",      tip:"港口倉庫改造，拍照聖地",    km:31,driveMin:36,stayMin:75},
+        {name:"港未來21・摩天輪",  tip:"橫濱夜景最佳觀賞點",        km:31,driveMin:36,stayMin:60},
+        {name:"三溪園",            tip:"古建築庭園，梅花・荷花各季皆美",km:33,driveMin:38,stayMin:75}
+      ]}
+    ]
+  },
+  hokkaido:{
+    destinations:[
+      {city:"富良野", driveH:2.2, nextDests:["美瑛","洞爺湖"], spots:[
+        {name:"富田農場（薰衣草）",tip:"7月最盛開，早上光線好",     km:160,driveMin:130,stayMin:90},
+        {name:"富良野起司工房",    tip:"現做起司免費試吃",          km:158,driveMin:128,stayMin:45},
+        {name:"北西の丘展望公園",  tip:"360度丘陵景色，日落必拍",  km:155,driveMin:125,stayMin:40},
+        {name:"富良野葡萄酒廠",    tip:"紅葡萄酒試飲，農場旁10分", km:162,driveMin:132,stayMin:45}
+      ]},
+      {city:"美瑛",  driveH:2.5, nextDests:["富良野","旭川"], spots:[
+        {name:"拼布之路・丘陵景觀",tip:"⚠️ 景點分散，包車才跑得完",km:175,driveMin:140,stayMin:90},
+        {name:"青池（白金青い池）",tip:"神秘藍色水池，早上光線最好",km:180,driveMin:145,stayMin:60},
+        {name:"四季彩之丘",        tip:"花田分區，適合拍照",         km:173,driveMin:138,stayMin:60},
+        {name:"新榮之丘展望公園",  tip:"夕陽聖地，免費",            km:170,driveMin:135,stayMin:30},
+        {name:"白鬚瀑布",          tip:"碧藍河水，青池旁5分",       km:181,driveMin:146,stayMin:30}
+      ]},
+      {city:"登別",  driveH:1.5, nextDests:["洞爺湖","函館"], spots:[
+        {name:"登別地獄谷",        tip:"火山噴煙地獄景觀，包車停地獄谷駐車場",km:90,driveMin:95,stayMin:75},
+        {name:"大湯沼",            tip:"滾燙硫磺湖，地獄谷走10分", km:91,driveMin:96,stayMin:30},
+        {name:"登別熊牧場",        tip:"北海道棕熊，纜車上山",      km:92,driveMin:97,stayMin:90},
+        {name:"登別温泉街",        tip:"足湯免費，下午最悠閒",      km:90,driveMin:95,stayMin:60}
+      ]},
+      {city:"函館",  driveH:3.5, nextDests:["洞爺湖","登別"], spots:[
+        {name:"函館山夜景展望台",  tip:"日本三大夜景，包車上山比纜車快",km:275,driveMin:210,stayMin:75},
+        {name:"金森紅磚倉庫群",    tip:"港口倉庫改造，函館朝市旁",   km:272,driveMin:208,stayMin:60},
+        {name:"函館朝市",          tip:"新鮮海膽・毛蟹，早上6點開市",km:271,driveMin:207,stayMin:60},
+        {name:"五稜郭公園",        tip:"星形要塞，春天賞櫻聖地",    km:273,driveMin:209,stayMin:75}
+      ]},
+      {city:"洞爺湖", driveH:1.7, nextDests:["登別","函館"], spots:[
+        {name:"洞爺湖遊覧船",      tip:"火山口湖遊覧，包車停碼頭",  km:110,driveMin:105,stayMin:75},
+        {name:"昭和新山",          tip:"1944年噴出的新山，洞爺湖旁20分",km:115,driveMin:110,stayMin:45},
+        {name:"有珠山纜車",        tip:"俯瞰洞爺湖全景",            km:114,driveMin:109,stayMin:75},
+        {name:"洞爺湖温泉街",      tip:"足湯免費，晚上煙火常設",    km:110,driveMin:105,stayMin:60}
+      ]},
+      {city:"小樽",  driveH:0.75, nextDests:["富良野","美瑛"], spots:[
+        {name:"小樽運河",          tip:"黃昏最美，路燈亮起時必拍",  km:40,driveMin:45,stayMin:60},
+        {name:"堺町通・玻璃工藝街",tip:"北一硝子不能錯過",          km:40,driveMin:45,stayMin:90},
+        {name:"小樽壽司屋通",      tip:"新鮮海膽・鮭魚卵",          km:39,driveMin:44,stayMin:60},
+        {name:"天狗山展望台",      tip:"小樽市區夜景，纜車上山",    km:42,driveMin:47,stayMin:60}
+      ]}
+    ]
+  },
+  okinawa:{
+    destinations:[
+      {city:"石垣島", driveH:1.0, isAir:true, nextDests:["宮古島","竹富島"], spots:[
+        {name:"川平灣",            tip:"沖繩最美海灣，玻璃底船必搭",km:20,driveMin:30,stayMin:90},
+        {name:"石垣島燈塔・禦神崎",tip:"珊瑚礁海岸，日落必拍",    km:25,driveMin:35,stayMin:60},
+        {name:"底地海灘",          tip:"淺灘透明，浮潛首選",         km:15,driveMin:25,stayMin:90},
+        {name:"石垣やいま村",      tip:"琉球古民家，體驗傳統文化",  km:10,driveMin:15,stayMin:75},
+        {name:"米原海灘",          tip:"珊瑚礁浮潛，川平灣旁",      km:18,driveMin:28,stayMin:90}
+      ]},
+      {city:"宮古島", driveH:0.75, isAir:true, nextDests:["石垣島","本部"], spots:[
+        {name:"砂山海灘",          tip:"心形岩石拱門，日落聖地",    km:8,driveMin:15,stayMin:60},
+        {name:"伊良部大橋",        tip:"全長3540m，免費通行，包車上橋",km:12,driveMin:20,stayMin:30},
+        {name:"池間島・池間大橋",  tip:"珊瑚礁一望無際",            km:18,driveMin:25,stayMin:45},
+        {name:"東平安名岬",        tip:"宮古島最東端，燈塔絕景",    km:25,driveMin:35,stayMin:45},
+        {name:"前浜海灘",          tip:"宮古藍透明海水，日本最美海灘",km:10,driveMin:18,stayMin:75}
+      ]},
+      {city:"本部",  driveH:1.5, nextDests:["南城","中部"], spots:[
+        {name:"沖繩美麗海水族館",  tip:"鯨鯊必看，下午較少人",      km:95,driveMin:90,stayMin:180},
+        {name:"古宇利島・古宇利大橋",tip:"開車上橋海景無敵",        km:80,driveMin:75,stayMin:60},
+        {name:"備瀬福木林道",      tip:"美麗海水族館旁，自然隧道",  km:97,driveMin:92,stayMin:45},
+        {name:"今歸仁城跡（世界遺產）",tip:"月見城，春天賞櫻聖地", km:85,driveMin:80,stayMin:75},
+        {name:"ORION啤酒廠",       tip:"沖繩限定啤酒試飲，水族館旁",km:90,driveMin:85,stayMin:60}
+      ]},
+      {city:"南城",  driveH:0.75, nextDests:["中部","本部"], spots:[
+        {name:"斎場御嶽（世界遺產）",tip:"琉球最高聖地，早上人少涼爽",km:36,driveMin:40,stayMin:60},
+        {name:"知念岬公園",        tip:"免費入場，太平洋海景壯觀",  km:35,driveMin:38,stayMin:45},
+        {name:"新原海灘",          tip:"淺灘珊瑚礁，浮潛絕佳",      km:32,driveMin:35,stayMin:90},
+        {name:"受水走水（御嶽）",  tip:"沖繩最古老農耕遺址，神秘感十足",km:38,driveMin:42,stayMin:40}
+      ]},
+      {city:"中部",  driveH:0.5, nextDests:["南城","本部"], spots:[
+        {name:"美國村",            tip:"沖繩美式風情，夜晚最熱鬧",  km:20,driveMin:25,stayMin:90},
+        {name:"座間味島",          tip:"渡輪30分，珊瑚礁潛水聖地",  km:25,driveMin:30,stayMin:180},
+        {name:"中城城跡（世界遺產）",tip:"高台上15世紀城跡，海景壯闊",km:22,driveMin:28,stayMin:60},
+        {name:"沖繩世界（玉泉洞）",tip:"鐘乳石洞，琉球文化體驗",    km:40,driveMin:45,stayMin:90}
+      ]},
+      {city:"久米島", driveH:1.0, isAir:true, nextDests:["石垣島","宮古島"], spots:[
+        {name:"畳石（烏龜岩）",    tip:"天然龜甲紋岩石，退潮時可走近",km:15,driveMin:20,stayMin:60},
+        {name:"奥武島（久米）",    tip:"橋連小島，翡翠色海水透明",  km:10,driveMin:15,stayMin:75},
+        {name:"比屋定バンタ",      tip:"斷崖展望台，東海海景一覽",  km:12,driveMin:17,stayMin:30},
+        {name:"久米島海灘",        tip:"沖繩最美星沙海灘之一",       km:8,driveMin:12,stayMin:90}
+      ]}
+    ]
+  }
+};
+ 
+function haversine(a,b){
+  const R=6371,toR=Math.PI/180;
+  const dLat=(b.lat-a.lat)*toR,dLng=(b.lng-a.lng)*toR;
+  const x=Math.sin(dLat/2)**2+Math.cos(a.lat*toR)*Math.cos(b.lat*toR)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
+}
+function calcDayDist(areasSeq,hotelArea){
+  if(!areasSeq||areasSeq.length===0)return 0;
+  const all=[hotelArea,...areasSeq];let total=0;
+  for(let i=0;i<all.length-1;i++){const a=COORDS[all[i]],b=COORDS[all[i+1]];if(a&&b)total+=haversine(a,b)*1.35;}
+  return Math.round(total);
+}
+function calcDayHours(distKm){return distKm/60;}
+ 
+// 移動日交通時間查表（優先查，查不到用 Haversine 估算）
+const TRANSIT_HOURS={
+  // 大阪京都延伸
+  "大阪→奈良":1.4,"奈良→大阪":1.4,
+  "大阪→神戶":0.75,"神戶→大阪":0.75,
+  "大阪→京都嵐山":1.25,"京都嵐山→大阪":1.25,
+  "大阪→姬路":1.2,"姬路→大阪":1.2,
+  "大阪→和歌山":1.5,"和歌山→大阪":1.5,
+  "大阪→伊勢":2.0,"伊勢→大阪":2.0,
+  // 東京延伸
+  "東京→箱根":1.5,"箱根→東京":1.5,
+  "東京→鎌倉":1.0,"鎌倉→東京":1.0,
+  "東京→熱海":1.5,"熱海→東京":1.5,
+  "東京→日光":2.0,"日光→東京":2.0,
+  "東京→富士山":2.0,"富士山→東京":2.0,
+  "東京→川越":0.75,"川越→東京":0.75,
+  "東京→橫濱":0.5,"橫濱→東京":0.5,
+  "箱根→熱海":0.75,"熱海→箱根":0.75,
+  // 北海道延伸
+  "札幌→富良野":2.2,"富良野→札幌":2.2,
+  "札幌→美瑛":2.5,"美瑛→札幌":2.5,
+  "札幌→登別":1.5,"登別→札幌":1.5,
+  "札幌→函館":3.5,"函館→札幌":3.5,
+  "札幌→洞爺湖":1.7,"洞爺湖→札幌":1.7,
+  "札幌→小樽":0.75,"小樽→札幌":0.75,
+  // 沖繩延伸
+  "那霸→石垣島":1.0,"石垣島→那霸":1.0,
+  "那霸→宮古島":0.75,"宮古島→那霸":0.75,
+  "那霸→本部":1.5,"本部→那霸":1.5,
+  "那霸→南城":0.75,"南城→那霸":0.75,
+  "那霸→中部":0.5,"中部→那霸":0.5,
+  "那霸→久米島":1.0,"久米島→那霸":1.0,
+};
+ 
+function getMoveDayInfo(from,to){
+  const key=from+'→'+to;
+  const transitH=TRANSIT_HOURS[key]||(()=>{
+    const a=CITY_COORD[from],b=CITY_COORD[to];
+    return a&&b?Math.round(haversine(a,b)/80*10)/10:2;
+  })();
+  const usableH=Math.max(0,10-transitH-1.5);
+  let maxSpots=0;
+  if(usableH>=5)maxSpots=3;
+  else if(usableH>=2.5)maxSpots=2;
+  else if(usableH>=1)maxSpots=1;
+  const destData=DEST_CITIES[S.city]?.destinations?.find(d=>d.city===to);
+  const isAir=destData?.isAir||false;
+  const transitKm=from&&to&&CITY_COORD[from]&&CITY_COORD[to]
+    ?Math.round(haversine(CITY_COORD[from],CITY_COORD[to])*1.35):0;
+  return{transitH,usableH,maxSpots,transitKm,isAir};
+}
+ 
+// 取得目的地城市的景點清單（from DEST_CITIES）
+function getDestSpots(toCityName){
+  if(!S.city||!DEST_CITIES[S.city])return[];
+  const dest=DEST_CITIES[S.city].destinations.find(d=>d.city===toCityName);
+  return dest?dest.spots:[];
+}
+ 
+// 切換移動日目的地城市
+function changeDestCity(di,cityName){
+  sw['dest-'+di]=cityName;
+  sw['mv-'+di+'-0']=0;sw['mv-'+di+'-1']=0;sw['mv-'+di+'-2']=0;
+  render(plan,currentCD);
+  toast2('已切換目的地：'+cityName);
+}
+ 
+// 從延伸城市再出發移動（插入新的移動日到 sw）
+function addExtMove(di, fromCity, toCity){
+  // sw['extmove-{di}'] 記錄在第 di 天之後插入的續程移動目的地
+  sw['extmove-'+di] = sw['extmove-'+di]===toCity ? null : toCity;
+  render(plan, currentCD);
+  if(sw['extmove-'+di]) toast2('已加入：'+fromCity+' → '+toCity+' 移動日');
+  else toast2('已取消續程移動');
+}
+ 
+// 驗證一天是否超限，回傳 {ok, distKm, hours, warn}
+const MAX_KM=280, MAX_HR=10;
+function validateDay(day, hotelArea, cd){
+  if(!day||day.theme?.includes('回程')||day.moveDay)
+    return {ok:true,distKm:0,hours:0,warn:null};
+  const slots=[day.morning,day.afternoon,day.evening].filter(Boolean);
+  if(slots.length===0) return {ok:true,distKm:0,hours:0,warn:null};
+  const areas=[];
+  slots.forEach(s=>{ if(s?.area) areas.push(s.area); });
+  if(day.food?.area && day.food.area!==areas[areas.length-1]) areas.push(day.food.area);
+  const startArea=hotelArea||areas[0];
+  const distKm=calcDayDist(areas,startArea);
+  const hours=calcDayHours(distKm);
+  let warn=null;
+  if(distKm>MAX_KM||hours>MAX_HR){
+    const overKm=distKm>MAX_KM,overHr=hours>MAX_HR;
+    warn='⚠️ 今日行車約 '+distKm+'km・預估 '+hours.toFixed(1)+'h，';
+    if(overKm&&overHr) warn+='超過 '+MAX_KM+'km 及 '+MAX_HR+'h 上限';
+    else if(overKm) warn+='超過 '+MAX_KM+'km 上限';
+    else warn+='超過 '+MAX_HR+'h 上限';
+    warn+='。建議刪去「'+(areas[areas.length-2]||areas[areas.length-1])+'」區景點。';
+  }
+  return {ok:!warn,distKm,hours,warn};
+}
+ 
+// ── 狀態 ────────────────────────────────────────────────
+let S={city:null,days:null,pace:null,group:null,hotel:null,tags:[]};
+let plan=null,currentCD=null,sw={},tSw=0;
+ 
+// ── 工具函數 ─────────────────────────────────────────────
+function getCD(){
+  if(S.hotel==='yes') return MULTI[S.city]||null;
+  return SINGLE[S.city]||null;
+}
+ 
+function getPlan(cd,days){
+  if(!cd) return [];
+  const n=parseInt(days);
+  const d=String(days);
+ 
+  // 1. 完全符合直接用
+  if(cd.days&&cd.days[d]) return cd.days[d].slice(0,n);
+ 
+  // 2. 找最接近的基底天數
+  let base=null;
+  if(cd.days){
+    const k=Object.keys(cd.days).sort((a,b)=>Math.abs(parseInt(a)-n)-Math.abs(parseInt(b)-n));
+    if(k.length) base=cd.days[k[0]].slice();
+  }
+  if(!base) return [];
+ 
+  // 3. 需要縮短：拿前 n-1 天的非回程 day + 最後一個回程 day
+  if(base.length>=n){
+    const returnDay=base.find(d=>d.theme&&d.theme.includes('回程'))||base[base.length-1];
+    const nonReturn=base.filter(d=>!d.theme||!d.theme.includes('回程'));
+    return [...nonReturn.slice(0,n-1), returnDay];
+  }
+ 
+  // 4. 需要延長：在回程日前插入「自由探索」補足
+  const returnDay=base.find(d=>d.theme&&d.theme.includes('回程'))||base[base.length-1];
+  const nonReturn=base.filter(d=>!d.theme||!d.theme.includes('回程'));
+  const extras=[];
+  // 找最後一個有景點的 day 作為模板（避免空 day）
+  const tmpl=nonReturn[nonReturn.length-1]||nonReturn[0];
+  for(let i=nonReturn.length+1;i<n;i++){
+    extras.push({
+      label:'Day '+i,
+      theme:tmpl?tmpl.theme+'（延伸）':'自由探索',
+      badge:'依心情安排',
+      morning:tmpl?tmpl.morning:null,
+      afternoon:tmpl?tmpl.afternoon:null,
+      evening:null,
+      food:tmpl?tmpl.food:null,
+      travel:tmpl?tmpl.travel:null,
+      note:'此天為自動延伸，可自行調整景點'
+    });
+  }
+  return [...nonReturn, ...extras, returnDay];
+}
+ 
+// ── 表單選擇 ─────────────────────────────────────────────
+function sel(btn){
+  const g=btn.dataset.g;
+  document.querySelectorAll(`[data-g="${g}"]`).forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  S[g]=btn.dataset.v;
+  // 選了城市 → 自動設單城市模式，清掉多城市選擇
+  if(g==='city'){
+    S.hotel='no';
+    document.getElementById('hotel-yes').classList.remove('sel');
+    document.getElementById('hotel-multi-note').style.display='none';
+  }
+  chk();
+}
+ 
+function tog(btn){
+  const t=btn.dataset.tag;
+  btn.classList.toggle('chk');
+  S.tags.includes(t)?S.tags=S.tags.filter(x=>x!==t):S.tags.push(t);
+}
+ 
+function selHotel(v){
+  const btn=document.getElementById('hotel-yes');
+  if(v==='yes'){
+    btn.classList.add('sel');
+    document.getElementById('hotel-multi-note').style.display='block';
+    S.hotel='yes';
+    // 不清 S.city，getCD() 需要它查對應的多城市路線
+    // 只在視覺上取消城市按鈕的選取樣式
+    document.querySelectorAll('[data-g="city"]').forEach(b=>b.classList.remove('sel'));
+  }
+  chk();
+}
+ 
+function chk(){
+  const ready=(S.hotel==='yes')||!!S.city;
+  document.getElementById('gbtn').disabled=!(ready&&S.days&&S.pace&&S.group);
+}
+ 
+// ── 生成行程 ─────────────────────────────────────────────
+function toast2(m,d=2500){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),d);}
+ 
+function gen(){
+  document.getElementById('form').style.display='none';
+  document.getElementById('ld').classList.add('show');
+  document.getElementById('d0').classList.remove('active');document.getElementById('d0').classList.add('done');
+  document.getElementById('d1').classList.add('active');document.getElementById('slbl').textContent='生成行程中';
+  setTimeout(()=>{
+    document.getElementById('ld').classList.remove('show');
+    build();
+    document.getElementById('rs').classList.add('show');
+    document.getElementById('d1').classList.remove('active');document.getElementById('d1').classList.add('done');
+    document.getElementById('d2').classList.add('active');document.getElementById('slbl').textContent='行程完成';
+  },1600);
+}
+ 
+function build(){
+  const cn={osaka_kyoto:'大阪・京都',tokyo:'東京',hokkaido:'北海道',okinawa:'沖繩'};
+  const pn={easy:'輕鬆節奏',balanced:'平衡節奏',active:'積極節奏'};
+  const gn={couple:'情侶',friends:'朋友',family:'家庭',kids:'親子'};
+  const days=parseInt(S.days);
+  const cityLabel = (S.hotel==='yes'&&S.city&&MULTI[S.city]) ? MULTI[S.city].label : cn[S.city]||'';
+  document.getElementById('rt').textContent=`${cityLabel} ${days}天${days-1}夜`;
+  document.getElementById('rm').textContent=`${pn[S.pace]}・${gn[S.group]}出遊`;
+  currentCD=getCD();
+  plan=getPlan(currentCD,S.days);
+  sw={};tSw=0;
+  render(plan,currentCD);
+  setTimeout(fillForm,100);
+}
+ 
+// ── 渲染卡片 ─────────────────────────────────────────────
+function render(p,cd){
+  const c=document.getElementById('cards');c.innerHTML='';
+ 
+  function getHotelArea(di){
+    if(S.hotel==='yes'){for(let i=di-1;i>=0;i--){if(p[i]&&p[i].hotel)return p[i].hotel;}return null;}
+    const firstSpots=Object.keys((cd&&cd.spots)||{});
+    return firstSpots[0]||null;
+  }
+ 
+  const mainCityName={osaka_kyoto:'大阪',tokyo:'東京',hokkaido:'札幌',okinawa:'那霸'}[S.city]||'';
+ 
+  // ── 預處理：標記哪些天需要隱藏，計算每天的實際住宿城市 ──
+  let hiddenDays=new Set();
+ 
+  // 找第一個 extmove 出現的位置（非 __return__，moveDay 也算）
+  let firstExtDi=-1;
+  for(let i=0;i<p.length;i++){
+    if(sw['extmove-'+i] && sw['extmove-'+i]!=='__return__'){
+      firstExtDi=i; break;
+    }
+  }
+ 
+  // extmove 之後（含本身如果是 moveDay），隱藏所有原始 moveDay
+  // 也隱藏多餘的重複住宿天（只保留最後一張）
+  if(firstExtDi>=0){
+    // 如果 firstExtDi 本身是 moveDay，也隱藏它
+    if(p[firstExtDi].moveDay) hiddenDays.add(firstExtDi);
+    for(let i=firstExtDi+1;i<p.length;i++){
+      if(p[i].theme&&p[i].theme.includes('回程')) break;
+      if(p[i].moveDay) hiddenDays.add(i);
+    }
+    // 找 firstExtDi 之後連續的同 hotel 住宿天，只保留對應 extmove 數量的住宿天
+    // 計算有多少個非__return__ extmove（連鎖移動數量）
+    let extMoveCount=0;
+    for(let i=0;i<p.length;i++){
+      if(sw['extmove-'+i]&&sw['extmove-'+i]!=='__return__') extMoveCount++;
+    }
+    // 找 firstExtDi 之後的非 moveDay、非回程的住宿天
+    let stayGroup=[];
+    for(let i=firstExtDi+1;i<p.length;i++){
+      if(p[i].theme&&p[i].theme.includes('回程')) break;
+      if(!p[i].moveDay && !hiddenDays.has(i) && p[i].hotel){
+        stayGroup.push(i);
+      }
+    }
+    // 保留 extMoveCount 張住宿天，隱藏多餘的前面幾張
+    if(stayGroup.length>extMoveCount){
+      const toHide=stayGroup.length-extMoveCount;
+      for(let k=0;k<toHide;k++){
+        hiddenDays.add(stayGroup[k]);
+      }
+    }
+ 
+  } // end if(firstExtDi>=0)
+ 
+  // 計算每天「今晚住的城市」：正向掃，extmove 優先蓋掉原始 moveDay
+  let stayCity=new Array(p.length).fill(mainCityName);
+  let cur2=mainCityName;
+  for(let i=0;i<p.length;i++){
+    stayCity[i]=cur2;
+    // extmove 永遠處理（即使是被隱藏的天）
+    const ext=sw['extmove-'+i];
+    if(ext&&ext!=='__return__') cur2=ext;
+    else if(ext==='__return__') cur2=mainCityName;
+    // 原始 moveDay 只在未被隱藏時才更新住宿
+    if(!hiddenDays.has(i) && p[i].moveDay){
+      const dest=sw['dest-'+i]||p[i].to;
+      if(dest) cur2=dest;
+    }
+  }
+ 
+  const hasAnyExtMove=firstExtDi>=0;
+ 
+  // 找最後一個住宿天（不含回程日、不含 moveDay）
+  let lastStayIdx=-1;
+  for(let i=p.length-1;i>=0;i--){
+    if(p[i].moveDay) continue;
+    // 無 extmove 時：theme 有「回程」就是回程日，直接跳過
+    if(!hasAnyExtMove && p[i].theme&&p[i].theme.includes('回程')) continue;
+    // 有 extmove 時：回程日被覆蓋成延伸城市才算住宿天
+    if(hasAnyExtMove && p[i].theme&&p[i].theme.includes('回程')&&stayCity[i]===mainCityName) continue;
+    // 跳過被隱藏且住在主城市的天
+    if(hiddenDays.has(i) && stayCity[i]===mainCityName) continue;
+    lastStayIdx=i; break;
+  }
+ 
+  let renderDayNum=0;
+  p.forEach(function(day,di){
+ 
+    // 隱藏被 extmove 覆蓋的原始天
+    if(hiddenDays.has(di)) return;
+ 
+    renderDayNum++;
+ 
+    const card=document.createElement('div');card.className='dc';
+    const hotelArea=getHotelArea(di);
+    const v=validateDay(day,hotelArea,cd);
+ 
+    // 此天的實際住宿城市
+    const currentStayCity=stayCity[di];
+    // 回程日永遠是回程日，不被 extmove 覆蓋
+    const isRawReturnDay=day.theme&&day.theme.includes('回程');
+    // isExtCity：有 extmove 且住在延伸城市，且不是原始回程日
+    const isExtCity=!isRawReturnDay && hasAnyExtMove && currentStayCity!==mainCityName && DEST_CITIES[S.city]?.destinations?.find(d=>d.city===currentStayCity);
+ 
+    // 標題/badge/住宿
+    let effectiveTheme=isExtCity?currentStayCity+'・深度遊覽':day.theme;
+    let effectiveBadge=isExtCity?'包車全日制':day.badge;
+    let effectiveHotel=isExtCity?currentStayCity:day.hotel;
+ 
+    // extmove 提示（明天出發）
+    const todayExtTo=sw['extmove-'+di];
+    const todayExtActive=todayExtTo&&todayExtTo!=='__return__';
+    const todayReturnActive=todayExtTo==='__return__';
+    if(todayExtActive){
+      effectiveTheme=effectiveTheme+' → 明天出發'+todayExtTo;
+      effectiveBadge='🧳 明天移動';
+    } else if(todayReturnActive){
+      effectiveTheme=effectiveTheme+' → 明天返回';
+      effectiveBadge='✈️ 明天回程';
+    }
+ 
+    // 距離徽章
+    const isReturnDay=day.theme&&day.theme.includes('回程')&&!isExtCity;
+    let distBadge='';
+    if(!day.moveDay&&!isReturnDay&&v.distKm>0){
+      const bg=v.ok?'rgba(74,124,89,.12)':'#c8502a';
+      const col=v.ok?'#2d6040':'white';
+      distBadge='<span style="font-size:10px;padding:2px 8px;border-radius:10px;margin-left:6px;font-weight:500;background:'+bg+';color:'+col+';display:inline-block">'+v.distKm+'km</span>';
+    }
+ 
+    let h='<div class="dh"><div class="dl">Day '+renderDayNum+'｜'+effectiveTheme+distBadge+'</div><div class="db">'+effectiveBadge+'</div></div><div class="dbody">';
+ 
+    // 距離警示
+    if(v.warn){
+      h+='<div style="background:#fff0ed;border:1.5px solid #c8502a;border-radius:8px;padding:10px 13px;margin-bottom:11px;font-size:12px;color:#8a2000;line-height:1.7">'+v.warn+'</div>';
+    } else if(!day.moveDay&&!isReturnDay&&v.distKm>0){
+      h+='<div style="background:rgba(74,124,89,.06);border-radius:6px;padding:7px 10px;margin-bottom:11px;font-size:11px;color:#2d6040">✅ 今日行車 '+v.distKm+'km・約 '+v.hours.toFixed(1)+'h，符合規範</div>';
+    }
+ 
+    // 備註
+    if(day.note) h+='<div style="font-size:12px;color:var(--muted);margin-bottom:11px;padding:7px 10px;background:var(--warm);border-radius:6px">'+day.note+'</div>';
+ 
+    // ── 明天出發提醒 banner ──
+    if(todayExtActive){
+      const mainCN={osaka_kyoto:'大阪',tokyo:'東京',hokkaido:'札幌',okinawa:'那霸'}[S.city]||'';
+      const extMiToday=getMoveDayInfo(effectiveHotel||day.hotel||mainCN,todayExtTo);
+      const extTimeLabel=extMiToday.isAir?'✈️ 飛機 約 '+Math.round(extMiToday.transitH*60)+'分':'🚐 包車約 '+Math.round(extMiToday.transitH*60)+'分';
+      h+='<div style="background:rgba(74,124,89,.08);border-left:3px solid var(--ok);border-radius:0 6px 6px 0;padding:9px 12px;margin-bottom:11px;font-size:12px;color:#2d6040">🧳 <strong>明天出發前往'+todayExtTo+'</strong>（'+extTimeLabel+'）<br><span style="font-size:11px;font-weight:400">建議今天行程不要排太滿，預留打包時間</span></div>';
+    } else if(todayReturnActive){
+      h+='<div style="background:rgba(200,80,42,.06);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:9px 12px;margin-bottom:11px;font-size:12px;color:var(--accent)">✈️ <strong>明天返回出發地</strong><br><span style="font-size:11px;font-weight:400">建議今天輕鬆收行李，不要安排太晚的景點</span></div>';
+    }
+ 
+    // 回程日（只有在不是延伸城市時才走回程邏輯）
+    if(day.theme&&day.theme.includes('回程')&&!isExtCity){
+      h+='<div style="text-align:center;padding:18px 0;color:var(--muted);font-size:14px">☕ 早上咖啡・輕鬆散步<br><span style="font-size:11px;display:block;margin-top:4px">中午前出發機場，不排任何景點</span></div></div></div>';
+      card.innerHTML=h;c.appendChild(card);return;
+    }
+ 
+    // 移動日 banner + 目的地選擇 + 動態景點
+    if(day.moveDay){
+      const activeDest=sw['dest-'+di]||day.to;
+      const mi=getMoveDayInfo(day.from,activeDest);
+      const luggageHtml=day.luggageTip?'<div class="move-day-lock">🧳 '+day.luggageTip+'</div>':'';
+      const transitLabel=mi.isAir?'✈️ 飛機 約 '+Math.round(mi.transitH*60)+'分':
+        '🚐 包車約 '+Math.round(mi.transitH*60)+'分'+(mi.transitKm>0&&mi.transitKm<=300?' · '+mi.transitKm+'km':'');
+      const spotsLabel=mi.maxSpots===0?'今日以移動為主，抵達即入住':
+        '交通後剩約 '+mi.usableH.toFixed(1)+'h，最多排 '+mi.maxSpots+' 個景點';
+      h+='<div class="move-day"><div class="move-day-icon">'+(mi.isAir?'✈️':'🚐')+'</div><div class="move-day-info"><div class="move-day-route">'+day.from+' → '+activeDest+'</div><div class="move-day-tip">'+transitLabel+'</div><div style="font-size:11px;color:rgba(250,247,242,.55);margin-top:3px">'+spotsLabel+'</div>'+luggageHtml+'</div><div class="move-day-badge">移動日</div></div>';
+ 
+      // ── 目的地城市選擇按鈕 ──
+      const allDests=DEST_CITIES[S.city]?DEST_CITIES[S.city].destinations:[];
+      if(allDests.length>0){
+        h+='<div style="margin-top:10px;padding:10px 12px;background:var(--warm);border-radius:8px">';
+        h+='<div style="font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;font-weight:600">🗺️ 今日目的地城市</div>';
+        h+='<div style="display:flex;flex-wrap:wrap;gap:6px">';
+        allDests.forEach(function(dest){
+          const isActive=dest.city===activeDest;
+          const mi2=getMoveDayInfo(day.from,dest.city);
+          const timeLabel=mi2.isAir?'✈️ '+Math.round(mi2.transitH*60)+'分':'🚐 '+Math.round(mi2.transitH*60)+'分';
+          const over=mi2.transitH>7;
+          h+='<button onclick="changeDestCity('+di+',\''+dest.city+'\')" style="padding:6px 11px;border:1.5px solid '+(isActive?'var(--accent)':'var(--border)')
+            +';border-radius:20px;background:'+(isActive?'rgba(200,80,42,.08)':'white')
+            +';font-size:12px;font-family:\'DM Sans\',sans-serif;cursor:pointer;color:'+(isActive?'var(--accent)':'var(--ink)')
+            +';font-weight:'+(isActive?'600':'400')
+            +'">'+(isActive?'✓ ':'')+dest.city+' <span style="font-size:10px;color:'+(over?'#c8502a':'var(--muted)')+'">'+timeLabel+'</span></button>';
+        });
+        h+='</div></div>';
+      }
+ 
+      // ── 目的地景點（每個 slot 用不同的初始 offset 避免重複）──
+      const destSpots=getDestSpots(activeDest);
+      if(mi.maxSpots>0&&destSpots.length>0){
+        h+='<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--warm)">';
+        h+='<div style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-weight:500">🚐 包車抵達後・'+activeDest+'景點</div>';
+        for(let si=0;si<mi.maxSpots;si++){
+          const swKey='mv-'+di+'-'+si;
+          // si 作為 base offset，確保三個 slot 預設顯示不同景點
+          const idx=(si+(sw[swKey]||0))%Math.max(destSpots.length,1);
+          const sp=destSpots[idx]||{name:'自由探索',tip:'依心情決定'};
+          const slotLabel=si===0?'下午':si===1?'傍晚':'晚上';
+          const driveTag=sp.driveMin?'<span style="font-size:10px;background:#f0ebe0;color:var(--muted);padding:1px 6px;border-radius:8px;margin-left:4px">🚐 '+sp.driveMin+'分</span>':'';
+          const stayTag=sp.stayMin?'<span style="font-size:10px;background:#f0ebe0;color:var(--muted);padding:1px 6px;border-radius:8px;margin-left:4px">⏱ '+sp.stayMin+'分</span>':'';
+          h+='<div class="sl"><div class="st">'+slotLabel+'</div><div class="sc"><div class="sm"><div class="sn">'+sp.name+driveTag+stayTag+'</div><div class="sa">'+activeDest+'</div>'+(sp.tip?'<div class="tip">💡 '+sp.tip+'</div>':'')+'</div><button class="swp" id="mv-sw-'+di+'-'+si+'" onclick="swapMV('+di+','+si+')">換一個</button></div></div>';
+          if(si<mi.maxSpots-1) h+='<div class="dv"></div>';
+        }
+        h+='</div>';
+      } else if(mi.maxSpots===0){
+        h+='<div style="margin-top:10px;text-align:center;padding:10px 0;color:var(--muted);font-size:12px">抵達後直接辦理入住，好好休息 🛏️</div>';
+      }
+    } else {
+ 
+    // ── 非移動日景點渲染：用 currentStayCity 決定景點來源 ──
+    const overrideCity=currentStayCity!==mainCityName?currentStayCity:null;
+ 
+    // 景點 slots（一般日）
+    const slots=[{t:'早上',d:day.morning},{t:'下午',d:day.afternoon},{t:'晚上',d:day.evening}].filter(s=>s.d);
+    if(!slots.length&&di===0) h+='<div style="font-size:13px;color:var(--muted);padding:8px 0">抵達・Check-in 後附近散步即可</div>';
+ 
+    // overrideCity 有對應景點資料就用延伸城市景點，否則用原始資料
+    const useDestPool=overrideCity&&DEST_CITIES[S.city]?.destinations?.find(d=>d.city===overrideCity);
+    const destPoolSpots=useDestPool?getDestSpots(overrideCity):null;
+ 
+    if(useDestPool&&destPoolSpots&&destPoolSpots.length>0){
+      // 隔天在目的地城市，直接用目的地景點 pool
+      h+='<div style="background:rgba(74,124,89,.06);border-radius:6px;padding:6px 10px;margin-bottom:9px;font-size:11px;color:#2d6040">📍 今日景點已切換為 '+overrideCity+' 的內容</div>';
+      const daySlots=[{t:'早上'},{t:'下午'},{t:'晚上'}].slice(0,slots.length||3);
+      daySlots.forEach(function(sl,si){
+        if(si>=destPoolSpots.length)return;
+        const idx=(si+(sw[di+'-'+si]||0))%Math.max(destPoolSpots.length,1);
+        const sp=destPoolSpots[idx]||{name:'自由探索',tip:'依心情決定'};
+        const kmTag=sp.km?'<span style="font-size:10px;background:#f0ebe0;color:var(--muted);padding:1px 6px;border-radius:8px;margin-left:4px">📍 '+sp.km+'km</span>':'';
+        const driveTag=sp.driveMin?'<span style="font-size:10px;background:#f0ebe0;color:var(--muted);padding:1px 6px;border-radius:8px;margin-left:2px">🚐 '+sp.driveMin+'分</span>':'';
+        const stayTag=sp.stayMin?'<span style="font-size:10px;background:#f0ebe0;color:var(--muted);padding:1px 6px;border-radius:8px;margin-left:2px">⏱ '+sp.stayMin+'分</span>':'';
+        h+='<div class="sl"><div class="st">'+sl.t+'</div><div class="sc"><div class="sm"><div class="sn">'+sp.name+kmTag+driveTag+stayTag+'</div><div class="sa">'+overrideCity+'</div>'+(sp.tip?'<div class="tip">💡 '+sp.tip+'</div>':'')+'</div><button class="swp" id="sw-'+di+'-'+si+'" onclick="swapS('+di+','+si+')">換一個</button></div></div>';
+        if(si<daySlots.length-1&&si<destPoolSpots.length-1) h+='<div class="dv"></div>';
+      });
+    } else {
+      // 原本的景點邏輯
+      slots.forEach(function(sl,si){
+        if(!sl.d||!cd)return;
+        const ar=cd.spots[sl.d.area]||[];
+        const idx=(sl.d.index+(sw[di+'-'+si]||0))%Math.max(ar.length,1);
+        const sp=ar[idx]||{name:'自由探索',tip:'依心情決定'};
+        const kmTag=sp.km?'<span style="font-size:10px;background:#f0ebe0;color:var(--muted);padding:1px 6px;border-radius:8px;margin-left:4px">📍 '+sp.km+'km</span>':'';
+        const driveTag=sp.driveMin?'<span style="font-size:10px;background:#f0ebe0;color:var(--muted);padding:1px 6px;border-radius:8px;margin-left:2px">🚐 '+sp.driveMin+'分</span>':'';
+        const stayTag=sp.stayMin?'<span style="font-size:10px;background:#f0ebe0;color:var(--muted);padding:1px 6px;border-radius:8px;margin-left:2px">⏱ '+sp.stayMin+'分</span>':'';
+        const swpBtn='<button class="swp" id="sw-'+di+'-'+si+'" onclick="swapS('+di+','+si+')">換一個</button>';
+        h+='<div class="sl"><div class="st">'+sl.t+'</div><div class="sc"><div class="sm"><div class="sn">'+sp.name+kmTag+driveTag+stayTag+'</div><div class="sa">'+sl.d.area+'</div>'+(sp.tip?'<div class="tip">💡 '+sp.tip+'</div>':'')+'</div>'+swpBtn+'</div></div>';
+        if(si<slots.length-1) h+='<div class="dv"></div>';
+      });
+    }
+    if(day.food&&cd){
+      const af=cd.restaurants[day.food.area]||[];
+      const fi=(day.food.index+(sw['f-'+di]||0))%Math.max(af.length,1);
+      const fd=af[fi]||{name:'Google Maps 找 4.0↑',backup:'附近隨機',tag:'自由選'};
+      h+='<div class="fs2"><div class="fl">🍴 今日餐廳</div><div class="fm"><span>'+fd.name+'</span><div style="display:flex;gap:5px;align-items:center"><span class="ftg">'+(fd.tag||'')+'</span><button class="swp" onclick="swapF('+di+')" style="font-size:10px;padding:4px 9px">換</button></div></div><div class="fbk">備案：'+fd.backup+' ｜ 排隊>30分鐘直接換</div></div>';
+    }
+ 
+    if(day.travel) h+='<div class="tn">🚐 包車 '+day.travel+'</div>';
+ 
+    // 住宿標示（多城市）
+    // 住宿標示
+    if(effectiveHotel){
+      let hotelNote='';
+      if(todayExtActive) hotelNote=' <span style="font-size:10px;color:#2d6040;background:rgba(74,124,89,.1);padding:1px 7px;border-radius:10px">明天 → '+todayExtTo+'</span>';
+      else if(todayReturnActive) hotelNote=' <span style="font-size:10px;color:var(--accent);background:rgba(200,80,42,.08);padding:1px 7px;border-radius:10px">明天返回出發地</span>';
+      h+='<div style="margin-top:9px;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px;flex-wrap:wrap">🏨 今晚住：<strong style="color:var(--ink)">'+effectiveHotel+'</strong>'+hotelNote+'</div>';
+    }
+ 
+    } // end else (non-moveDay)
+ 
+    // ── 移動選項：每個住宿天固定顯示「移動目的地」和「返回出發地」──
+    // 無 extmove 時，永遠從主城市出發列選項
+    // 有 extmove 後，從延伸城市出發列 nextDests
+    const hasTriggedExtMove=firstExtDi>=0;
+    const curCity=hasTriggedExtMove?(stayCity[di]||mainCityName):mainCityName;
+    const isInMainCity=curCity===mainCityName;
+    const destData=DEST_CITIES[S.city]?.destinations?.find(d=>d.city===curCity);
+    const allDests=DEST_CITIES[S.city]?.destinations||[];
+ 
+    if(S.hotel==='yes' && parseInt(S.days||0)>=5 && di>=1 && allDests.length>0 && !isReturnDay){
+ 
+      const actualCity=stayCity[di]||mainCityName;
+      const actualIsExt=actualCity!==mainCityName && DEST_CITIES[S.city]?.destinations?.find(d=>d.city===actualCity);
+ 
+      // 非 moveDay 住宿天永遠顯示延伸移動
+      const showMove=!day.moveDay;
+ 
+      // 「移動目的地」區塊
+      const nextOptions=isInMainCity ? allDests.map(d=>d.city) : (destData?.nextDests||[]);
+      if(showMove && nextOptions.length>0){
+        const activeExt=sw['extmove-'+di];
+        h+='<div style="margin-top:12px;padding:10px 12px;background:rgba(74,124,89,.06);border:1.5px dashed var(--ok);border-radius:8px">';
+        h+='<div style="font-size:10px;color:#2d6040;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;font-weight:600">🚐 明天要出發移動嗎？</div>';
+        h+='<div style="display:flex;flex-wrap:wrap;gap:6px">';
+        nextOptions.forEach(function(nextCity){
+          const isActive=activeExt===nextCity;
+          const mi2=getMoveDayInfo(curCity,nextCity);
+          const timeLabel=mi2.isAir?'✈️ '+Math.round(mi2.transitH*60)+'分':'🚐 '+Math.round(mi2.transitH*60)+'分';
+          const over=mi2.transitH>5;
+          h+='<button onclick="addExtMove('+di+',\''+curCity+'\',\''+nextCity+'\')" style="padding:6px 11px;border:1.5px solid '+(isActive?'var(--ok)':'var(--border)')
+            +';border-radius:20px;background:'+(isActive?'rgba(74,124,89,.12)':'white')
+            +';font-size:12px;font-family:\'DM Sans\',sans-serif;cursor:pointer;color:'+(isActive?'#2d6040':(over?'#b84400':'var(--ink)'))
+            +';font-weight:'+(isActive?'600':'400')
+            +'">'+(isActive?'✓ ':'')+nextCity+' <span style="font-size:10px;color:'+(over?'#c8502a':'var(--muted)')+'">'+timeLabel+'</span></button>';
+        });
+        h+='</div>';
+        if(activeExt&&activeExt!=='__return__') h+='<div style="font-size:11px;color:#2d6040;margin-top:7px">✅ 已加入：'+curCity+' → '+activeExt+'，隔天行程自動切換</div>';
+        h+='</div>';
+      }
+ 
+      // 「返回出發地」區塊：
+      // - moveDay：只在 extmove 已觸發且住在延伸城市時顯示
+      // - 住宿天：住在延伸城市時顯示
+      const showReturnBtn = actualIsExt && (!day.moveDay || firstExtDi>=0);
+      if(showReturnBtn){
+        const mi2=getMoveDayInfo(actualCity,mainCityName);
+        const timeLabel=mi2.isAir?'✈️ '+Math.round(mi2.transitH*60)+'分':'🚐 '+Math.round(mi2.transitH*60)+'分';
+        const activeReturn=sw['extmove-'+di]==='__return__';
+        h+='<div style="margin-top:8px;padding:10px 12px;background:rgba(200,80,42,.05);border:1.5px dashed var(--accent);border-radius:8px">';
+        h+='<div style="font-size:10px;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;font-weight:600">✈️ 或者，明天返回出發地</div>';
+        h+='<button onclick="addExtMove('+di+',\''+actualCity+'\',\'__return__\')" style="padding:6px 14px;border:1.5px solid '+(activeReturn?'var(--accent)':'var(--border)')
+          +';border-radius:20px;background:'+(activeReturn?'rgba(200,80,42,.08)':'white')
+          +';font-size:12px;font-family:\'DM Sans\',sans-serif;cursor:pointer;color:'+(activeReturn?'var(--accent)':'var(--ink)')
+          +';font-weight:'+(activeReturn?'600':'400')
+          +'">'+(activeReturn?'✓ 已加入 · ':'')+'返回'+mainCityName+' <span style="font-size:10px;color:var(--muted)">'+timeLabel+'</span></button>';
+        if(activeReturn) h+='<div style="font-size:11px;color:var(--accent);margin-top:7px">✅ 回程前一天會先包車返回'+mainCityName+'，隔天直接前往機場</div>';
+        h+='</div>';
+      }
+    }
+ 
+    h+='</div>';card.innerHTML=h;c.appendChild(card);
+ 
+    // ── 若此天有設定 extmove，插入一張虛擬移動日卡片 ──
+    const extTo=sw['extmove-'+di];
+    if(extTo&&!day.theme?.includes('回程')){
+      const extFrom=effectiveHotel||day.hotel||'';
+      // 處理「返回出發地」特殊值
+      const mainCityName={osaka_kyoto:'大阪',tokyo:'東京',hokkaido:'札幌',okinawa:'那霸'}[S.city]||'出發地';
+      const realExtTo=extTo==='__return__'?mainCityName:extTo;
+      const extMi=getMoveDayInfo(extFrom,realExtTo);
+      const extSpots=extTo==='__return__'?[]:getDestSpots(realExtTo);
+      const extCard=document.createElement('div');extCard.className='dc';
+      const extLabel='Day '+(renderDayNum+1)+'+ '+(extTo==='__return__'?'返程移動':'續程');
+      const extTransitLabel=extMi.isAir?'✈️ 飛機 約 '+Math.round(extMi.transitH*60)+'分':'🚐 包車約 '+Math.round(extMi.transitH*60)+'分';
+      const extHeaderBg=extTo==='__return__'?'linear-gradient(135deg,var(--accent),#b8441f)':'linear-gradient(135deg,#2d6040,#1a3d28)';
+      const extBadgeLabel=extTo==='__return__'?'返回出發地':'續程移動';
+      let eh='<div class="dh" style="background:'+extHeaderBg+'"><div class="dl" style="color:white">'+extLabel+'｜'+extFrom+' → '+realExtTo+'</div><div class="db" style="background:rgba(0,0,0,.25);color:white;border-color:transparent">'+extBadgeLabel+'</div></div><div class="dbody">';
+      eh+='<div class="move-day"><div class="move-day-icon">'+(extMi.isAir?'✈️':'🚐')+'</div><div class="move-day-info"><div class="move-day-route">'+extFrom+' → '+realExtTo+'</div><div class="move-day-tip">'+extTransitLabel+'</div>';
+      if(extTo==='__return__'){
+        eh+='<div style="font-size:11px;color:rgba(250,247,242,.55);margin-top:3px">返回'+realExtTo+'後，隔天前往機場</div>';
+      } else {
+        eh+='<div style="font-size:11px;color:rgba(250,247,242,.55);margin-top:3px">交通後剩約 '+extMi.usableH.toFixed(1)+'h，最多排 '+extMi.maxSpots+' 個景點</div>';
+      }
+      eh+='</div><div class="move-day-badge">移動日</div></div>';
+      if(extTo!=='__return__' && extMi.maxSpots>0&&extSpots.length>0){
+        eh+='<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--warm)">';
+        eh+='<div style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-weight:500">🚐 包車抵達後・'+realExtTo+'景點</div>';
+        for(let si=0;si<extMi.maxSpots;si++){
+          const swKey='ext-'+di+'-'+si;
+          const idx=(si+(sw[swKey]||0))%Math.max(extSpots.length,1);
+          const sp=extSpots[idx]||{name:'自由探索',tip:'依心情決定'};
+          const slotLabel=si===0?'下午':si===1?'傍晚':'晚上';
+          const driveTag=sp.driveMin?'<span style="font-size:10px;background:#f0ebe0;color:var(--muted);padding:1px 6px;border-radius:8px;margin-left:4px">🚐 '+sp.driveMin+'分</span>':'';
+          const stayTag=sp.stayMin?'<span style="font-size:10px;background:#f0ebe0;color:var(--muted);padding:1px 6px;border-radius:8px;margin-left:4px">⏱ '+sp.stayMin+'分</span>':'';
+          eh+='<div class="sl"><div class="st">'+slotLabel+'</div><div class="sc"><div class="sm"><div class="sn">'+sp.name+driveTag+stayTag+'</div><div class="sa">'+realExtTo+'</div>'+(sp.tip?'<div class="tip">💡 '+sp.tip+'</div>':'')+'</div><button class="swp" onclick="(function(){sw[\'ext-'+di+'-'+si+'\']=(sw[\'ext-'+di+'-'+si+'\']||0)+1;render(plan,currentCD);})()">換一個</button></div></div>';
+          if(si<extMi.maxSpots-1) eh+='<div class="dv"></div>';
+        }
+        eh+='</div>';
+      } else if(extTo==='__return__'){
+        eh+='<div style="margin-top:10px;padding:10px 12px;background:var(--warm);border-radius:8px;font-size:12px;color:var(--muted)">☕ 早上輕鬆整理行李・包車送回'+realExtTo+'，隔天直接前往機場</div>';
+      }
+      // ── 移動卡底部：延伸移動 + 返回出發地（跟住宿卡同樣邏輯）──
+      if(S.hotel==='yes' && parseInt(S.days||0)>=5){
+        // 找住在 realExtTo 的所有天（含隱藏天），判斷是否有空間繼續移動
+        // extStayDi：找「住在 realExtTo 且下一天不是回程」的那天，用來掛繼續移動按鈕
+        // extLastDi：找「住在 realExtTo 的最後一天」，用來掛返回出發地按鈕
+        let extStayDi=-1;
+        let extLastDi=-1;
+        let extStayCount=0;
+        for(let xi=di+1;xi<p.length;xi++){
+          if(p[xi].theme&&p[xi].theme.includes('回程')) break;
+          if(stayCity[xi]===realExtTo){
+            extLastDi=xi;
+            // extStayDi：只用用戶看得到的天（非隱藏、非 moveDay）
+            if(extStayDi<0 && !hiddenDays.has(xi) && !p[xi].moveDay) extStayDi=xi;
+            if(!hiddenDays.has(xi)&&!p[xi].moveDay) extStayCount++;
+          }
+        }
+        if(extStayDi<0) extStayDi=extLastDi;
+        const extBtnDi=extLastDi>=0?extLastDi:-1;
+        // 移動卡永遠顯示延伸選項
+        var extHasRoom=extBtnDi>=0;
+ 
+        if(extBtnDi>=0){
+          // extHasRoom 已在上面用 extStayCount>=2 計算
+ 
+          // 延伸城市的 nextDests
+          const extDestInfo=DEST_CITIES[S.city]?.destinations?.find(d=>d.city===realExtTo);
+          const extNextOpts=extDestInfo?.nextDests||[];
+ 
+          // 「繼續移動」區塊
+          if(extHasRoom && extNextOpts.length>0){
+            const activeNextTo=sw['extmove-'+extStayDi];
+            eh+='<div style="margin-top:12px;padding:10px 12px;background:rgba(74,124,89,.06);border:1.5px dashed var(--ok);border-radius:8px">';
+            eh+='<div style="font-size:10px;color:#2d6040;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;font-weight:600">🚐 明天要繼續移動嗎？</div>';
+            eh+='<div style="display:flex;flex-wrap:wrap;gap:6px">';
+            extNextOpts.forEach(function(nextCity){
+              const isAct=activeNextTo===nextCity;
+              const mi2=getMoveDayInfo(realExtTo,nextCity);
+              const tl=mi2.isAir?'✈️ '+Math.round(mi2.transitH*60)+'分':'🚐 '+Math.round(mi2.transitH*60)+'分';
+              eh+='<button onclick="addExtMove('+extStayDi+',\''+realExtTo+'\',\''+nextCity+'\')" style="padding:6px 11px;border:1.5px solid '+(isAct?'var(--ok)':'var(--border)')
+                +';border-radius:20px;background:'+(isAct?'rgba(74,124,89,.12)':'white')
+                +';font-size:12px;font-family:\'DM Sans\',sans-serif;cursor:pointer;color:'+(isAct?'#2d6040':'var(--ink)')
+                +';font-weight:'+(isAct?'600':'400')+'">'+( isAct?'✓ ':'')+nextCity+' <span style="font-size:10px;color:var(--muted)">'+tl+'</span></button>';
+            });
+            eh+='</div>';
+            eh+='</div>';
+          }
+ 
+          // 「返回出發地」區塊
+          const mi2=getMoveDayInfo(realExtTo,mainCityName);
+          const tl=mi2.isAir?'✈️ '+Math.round(mi2.transitH*60)+'分':'🚐 '+Math.round(mi2.transitH*60)+'分';
+          const actRet=sw['extmove-'+extBtnDi]==='__return__';
+          eh+='<div style="margin-top:8px;padding:10px 12px;background:rgba(200,80,42,.05);border:1.5px dashed var(--accent);border-radius:8px">';
+          eh+='<div style="font-size:10px;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;font-weight:600">✈️ 或者，明天返回出發地</div>';
+          eh+='<button onclick="addExtMove('+extBtnDi+',\''+realExtTo+'\',\'__return__\')" style="padding:6px 14px;border:1.5px solid '+(actRet?'var(--accent)':'var(--border)')
+            +';border-radius:20px;background:'+(actRet?'rgba(200,80,42,.08)':'white')
+            +';font-size:12px;font-family:\'DM Sans\',sans-serif;cursor:pointer;color:'+(actRet?'var(--accent)':'var(--ink)')
+            +';font-weight:'+(actRet?'600':'400')+'">'+(actRet?'✓ 已加入 · ':'')+'返回'+mainCityName+' <span style="font-size:10px;color:var(--muted)">'+tl+'</span></button>';
+          if(actRet) eh+='<div style="font-size:11px;color:var(--accent);margin-top:7px">✅ 回程前一天會先包車返回'+mainCityName+'，隔天直接前往機場</div>';
+          eh+='</div>';
+        }
+      }
+ 
+      // 取消按鈕
+      eh+='<button onclick="addExtMove('+di+',\''+extFrom+'\',\''+extTo+'\')" style="margin-top:10px;width:100%;padding:8px;border:1px solid var(--border);border-radius:8px;background:white;font-size:12px;color:var(--muted);cursor:pointer;font-family:\'DM Sans\',sans-serif">✕ 取消此段移動</button>';
+      eh+='</div>';
+      extCard.innerHTML=eh;c.appendChild(extCard);
+      renderDayNum++; // 移動卡算一天
+    }
+  });
+}
+ 
+// ── 換一個（移動日目的地景點）────────────────────────────────
+function swapMV(di,si,poolSize){
+  const key='mv-'+di+'-'+si;
+  sw[key]=(sw[key]||0)+1;
+  tSw++;
+  const b=document.getElementById('mv-sw-'+di+'-'+si);
+  if(b){b.classList.add('swapped');b.textContent='✓ 換好了';setTimeout(function(){b.classList.remove('swapped');b.textContent='換一個';},900);}
+  render(plan,currentCD);
+  toast2('已換成'+plan[di].to+'的其他景點');
+}
+ 
+// ── 換一個 ───────────────────────────────────────────────
+function swapS(di,si){
+  sw[`${di}-${si}`]=(sw[`${di}-${si}`]||0)+1;tSw++;
+  const b=document.getElementById(`sw-${di}-${si}`);
+  if(b){b.classList.add('swapped');b.textContent='✓ 換好了';setTimeout(()=>{b.classList.remove('swapped');b.textContent='換一個';},900);}
+  render(plan,currentCD);
+  if(tSw===2)setTimeout(()=>document.getElementById('ub').classList.add('show'),400);
+  toast2('已換成同區域的其他選項');
+}
+function swapF(di){sw[`f-${di}`]=(sw[`f-${di}`]||0)+1;tSw++;render(plan,currentCD);toast2('餐廳已更換備案');}
+ 
+// ── 突發狀況 ─────────────────────────────────────────────
+function sit(t){
+  const m={
+    queue:'建議：直接離開，用 Google Maps 搜附近 4.0↑、評論200以上的店，走過去吃。不要糾結。',
+    rain:'建議：改去室內景點——百貨、美術館、室內市場。',
+    late:'建議：刪掉今天最後一個景點，優先保留吃飯時間。行程寧可少、不要趕。',
+    tired:'建議：找最近的咖啡廳坐30分鐘，或直接回飯店休息。'
+  };
+  toast2(m[t],4000);
+}
+ 
+// ── 詢價單填入 ───────────────────────────────────────────
+function fillForm(){
+  const cn={osaka_kyoto:'大阪・京都',tokyo:'東京',hokkaido:'北海道',okinawa:'沖繩'};
+  const days=parseInt(S.days);
+  document.getElementById('i6').value=`${days}天${days-1}夜`;
+  document.getElementById('i7').value=S.hotel==='yes'?'東京・箱根・熱海':(cn[S.city]||'');
+  if(!plan)return;
+  let it='';
+  plan.forEach((day,di)=>{
+    if(day.theme&&day.theme.includes('回程')){it+=`${day.label}：回程，機場離境\n`;return;}
+    if(day.moveDay){it+=`${day.label}：【移動日】${day.from}→${day.to}，${day.travel||''}\n`;return;}
+    let spots=[];
+    [{d:day.morning},{d:day.afternoon},{d:day.evening}].filter(s=>s.d).forEach((sl,si)=>{
+      if(!sl.d||!currentCD)return;
+      const ar=currentCD.spots[sl.d.area]||[];
+      const idx=(sl.d.index+(sw[`${di}-${si}`]||0))%Math.max(ar.length,1);
+      if(ar[idx])spots.push(ar[idx].name);
+    });
+    let fd='';
+    if(day.food&&currentCD){const af=currentCD.restaurants[day.food.area]||[];const fi=(day.food.index+(sw[`f-${di}`]||0))%Math.max(af.length,1);if(af[fi])fd=`（餐：${af[fi].name}）`;}
+    it+=`${day.label}：${spots.join('→')||day.theme}${fd}\n`;
+  });
+  document.getElementById('i8').value=it.trim();
+}
+ 
+// ── 複製詢價單 ───────────────────────────────────────────
+function copy(){
+  const sv=document.querySelector('input[name="sv"]:checked')?.value;
+  const svt=sv==='plan'?'需要協助規劃行程（NT$2,000諮詢費，成團可折抵）':'已規劃好行程，只需報價';
+  const g=id=>document.getElementById(id)?.value?.trim()||'（未填）';
+  const txt=`【GOJAPAN 日本包車詢價】\n\n1. 台灣居住縣市：${g('i1')}\n2. 出發地點：${g('i2')}\n3. 旅遊結束地點：${g('i3')}\n4. 預定包車日期：${g('i4')}\n5. 包車人數：${g('i5')}\n6. 包車天數：${g('i6')}\n7. 旅遊城市：${g('i7')}\n8. 具體行程：\n${g('i8')}\n9. 每日住宿：${g('i9')}\n10. 兒童座椅：${g('i10')}\n11. 行李：${g('i11')}\n12. 航班抵達：${g('i12')}\n13. 航班離境：${g('i13')}\n\n諮詢需求：${svt}\n\n（此詢價單由 GOJAPAN AI 行程規劃工具產生）`;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const b=document.getElementById('cpbtn');b.textContent='✅ 已複製！貼到 LINE 即可';b.classList.add('copied');
+    setTimeout(()=>{b.textContent='📋 一鍵複製詢價單 → 貼到 LINE';b.classList.remove('copied');},3000);
+    toast2('詢價單已複製，請貼到 GOJAPAN LINE 客服',3000);
+  }).catch(()=>toast2('請手動選取並複製詢價單內容',3000));
+}
+ 
+// ── 重新規劃 ─────────────────────────────────────────────
+function reset(){
+  S={city:null,days:null,pace:null,group:null,hotel:null,tags:[]};
+  sw={};tSw=0;plan=null;currentCD=null;
+  document.querySelectorAll('.ob').forEach(b=>b.classList.remove('sel'));
+  document.querySelectorAll('.cb').forEach(b=>b.classList.remove('chk'));
+  document.getElementById('hotel-multi-note').style.display='none';
+  document.getElementById('gbtn').disabled=true;
+  document.getElementById('form').style.display='block';
+  document.getElementById('rs').classList.remove('show');
+  document.getElementById('ub').classList.remove('show');
+  document.getElementById('cards').innerHTML='';
+  ['d0','d1','d2'].forEach(id=>{document.getElementById(id).classList.remove('active','done');});
+  document.getElementById('d0').classList.add('active');
+  document.getElementById('slbl').textContent='填寫偏好';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
